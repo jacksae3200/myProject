@@ -72,11 +72,11 @@
 - 변경: `Assets/CpcPrototype/Core/AmmoInventory.cs`, `Assets/CpcPrototype/Survival/SurvivalPlayer.cs`, `Assets/CpcPrototype/Survival/CombatFeatures.md`, `Assets/CpcPrototype/Tests/EditMode/AmmoInventoryTests.cs`, `Docs/01_IMPLEMENTED.md`, `Docs/02_FEATURE_REQUESTS.md`, `Docs/CI_CD.md`.
 - 남은 검증: KayKit_DepthSurvival 씬에서 실제 입력·UI·사격/조준·전투 회귀 플레이를 확인해야 합니다. 이에 따라 FEAT-004는 검증 대기입니다.
 
-### 2026-11-23 — FEAT-006 · Unity 독립 Core와 CI/CD 기반
+### 2026-11-24 — FEAT-006 · Unity 독립 Core와 CI/CD 기반
 
 - `BehaviorTree.cs`를 Unity 참조를 금지하는 `CpcPrototype.Core` 어셈블리로 이동하고, 순수 C# 동작 검증을 위한 NUnit Edit Mode 테스트 6개를 추가했습니다. 기존 `.meta` GUID를 유지했습니다.
-- 권장 규칙 분리 순서와 GitHub Actions CI→빌드→승인 배포 단계를 [CI/CD 가이드](CI_CD.md)에 기록했습니다. 별도 서버/백엔드 분리를 완료한 것이 아니라 Unity 내부 Core와 엔진 어댑터 경계를 시작한 상태입니다.
-- 정적 검토: 기존 `CubeMonsterBrain` 참조는 유지되며 Core asmdef에 Unity 참조가 없습니다. 프로젝트 버전 6000.6.10f1에서 Core와 테스트 어셈블리 컴파일을 확인했습니다. Unity Test Runner 결과는 생성되지 않아 FEAT-006은 검증 대기입니다.
+- `.github/workflows/unity-tests.yml`을 추가해 main 푸시/PR에서 Unity 6000.6.10f1 Edit Mode NUnit 테스트를 실행하고, LFS 에셋 체크아웃·Library 캐시·결과 아티팩트 업로드를 구성했습니다. GitHub Actions 수동 실행도 지원합니다. 권장 규칙 분리 순서와 CI→빌드→승인 배포 단계를 [CI/CD 가이드](CI_CD.md)에 기록했습니다. 별도 서버/백엔드 분리를 완료한 것이 아니라 Unity 내부 Core와 엔진 어댑터 경계를 시작한 상태입니다.
+- 정적 검토: 기존 `CubeMonsterBrain` 참조는 유지되며 Core asmdef에 Unity 참조가 없습니다. 프로젝트 버전 6000.6.10f1에서 Core와 테스트 어셈블리 컴파일을 확인했습니다. workflow YAML은 구성했으나 GitHub Actions 실제 실행 결과는 아직 없으므로 FEAT-006은 검증 대기입니다.
 
 ### 2026-11-17 — BUG-010 · 그래플 방향과 최대 후킹 거리
 

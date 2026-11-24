@@ -22,8 +22,20 @@
 5. 배포는 빌드 산출물을 보관한 뒤 별도 수동 승인 환경으로 진행합니다. 시크릿/서명 키는 GitHub Environments에 두고 로그나 저장소에 넣지 않습니다.
 6. PR에서 테스트, 기본 브랜치에서 테스트+빌드, 릴리스 태그/승인에서 배포하는 흐름으로 확장합니다. 초기에는 CI 검증까지만 자동화하고, 배포 대상과 라이선스가 확인된 뒤 배포 단계를 켭니다.
 
+## NUnit CI 첫 workflow
+
+`.github/workflows/unity-tests.yml`은 `main`에 푸시하거나 `main` 대상 PR을 열 때 Unity 6000.6.10f1의 Edit Mode 테스트를 실행합니다. Git LFS 파일 체크아웃과 Unity `Library` 캐시를 사용하고, 테스트 결과를 Actions 아티팩트로 업로드합니다. `workflow_dispatch`로 GitHub Actions 화면에서 수동 실행도 할 수 있습니다.
+
+저장소의 **Settings → Secrets and variables → Actions → New repository secret**에 다음 세 값이 등록되어 있어야 합니다.
+
+- `UNITY_LICENSE`: 활성화된 Unity 라이선스 파일 전체 내용
+- `UNITY_EMAIL`: Unity ID의 이메일
+- `UNITY_PASSWORD`: Google 비밀번호가 아닌 Unity ID용 비밀번호
+
+첫 실행은 GitHub 저장소의 **Actions → Unity Edit Mode Tests → Run workflow**에서 시작할 수 있습니다. 실행이 끝나면 job 결과와 `unity-editmode-test-results` 아티팩트를 확인합니다. 실패하면 로그에서 라이선스 활성화, Unity 버전 이미지, 패키지 임포트, 테스트 실패 중 어느 단계인지 확인합니다. 테스트 결과가 통과해도 빌드·씬 플레이 및 실제 게임 통합 검증까지 통과했다는 뜻은 아닙니다.
+
 ## 이번 변경에서 아직 하지 않은 것
 
-- GitHub Actions workflow는 추가하지 않았습니다. 저장소 원격 주소, Unity 라이선스/활성화 방식, 빌드 대상과 배포 대상이 확인되지 않아 실행 가능한 빌드/배포 설정을 임의로 만들 수 없습니다.
+- Windows 빌드와 itch.io 배포 workflow는 아직 추가하지 않았습니다. 현재는 NUnit Edit Mode CI를 먼저 검증하고, 그 결과와 목표 플랫폼을 확인한 뒤 구성합니다.
 - Unity Test Runner 또는 Unity batchmode 실행 결과는 확인되지 않았습니다. 테스트 파일 추가만으로 통과로 간주하지 않습니다.
 - CI/로컬 기준 Unity 버전은 `ProjectSettings/ProjectVersion.txt`에 현재 기록된 6000.6.10f1입니다. Unity 배치 Test Runner는 XML 생성 전 리포트 서버 초기화 중단으로 끝났습니다. 프로젝트에 포함된 NUnit framework로 순수 Core 테스트 13개를 로컬에서 실행해 통과했으며 Unity 통합 컴파일/씬 검증 결과와는 별도로 취급합니다.
