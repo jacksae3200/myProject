@@ -74,6 +74,11 @@ namespace CpcPrototype.Editor
             Debug.Log(
                 $"Windows player build succeeded: {fullOutputPath}; " +
                 $"size={report.summary.totalSize} bytes; scenes={scenes.Length}.");
+
+            if (!File.Exists(fullOutputPath))
+            {
+                throw new FileNotFoundException("BuildPipeline reported success but did not create the player executable.", fullOutputPath);
+            }
         }
     }
 }

@@ -29,12 +29,12 @@
 - 적용 범위: Unity batch mode 빌드 진입점, GitHub Actions Windows 빌드 workflow, 실행 및 결과 확인 안내.
 - 완료 기준:
   - [x] 프로젝트의 활성 Build Settings 씬을 사용해 Windows x64 빌드를 실행한다.
-  - [x] 빌드 성공/실패를 workflow 결과에 반영하고 빌드 파일을 Actions artifact로 보관한다.
-  - [ ] 실제 self-hosted runner에서 workflow를 실행하고 Windows 플레이어 산출물을 확인한다.
+  - [x] 빌드 성공/실패를 workflow 결과에 반영한다.
+  - [ ] Windows 플레이어 파일을 Actions artifact로 업로드하고 내려받아 확인한다.
 - 관련 요청 / 의존성: FEAT-008, FEAT-006. Runner에 ProjectVersion.txt와 일치하는 Unity Editor 및 Windows Build Support가 설치·활성화되어야 한다.
 - 구현 메모 / 변경 파일: `Assets/CpcPrototype/Editor/WindowsPlayerBuild.cs`, `.github/workflows/windows-player-build.yml`, `Docs/CI_CD.md`.
-- 검증 방법 / 결과: workflow의 runner/수동 트리거/artifact 설정, 빌드 진입점의 Windows x64 타깃, 활성 씬 경로 및 씬 파일 존재 정적 확인 통과. `git diff --check` 통과. Unity 빌드 및 GitHub Actions 실행은 아직 하지 않았다.
-- 남은 사항 / 보류 이유: 변경을 GitHub에 푸시한 뒤 Actions에서 workflow를 실행해 산출물을 확인해야 한다.
+- 검증 방법 / 결과: 사용자가 Actions 로그에서 `upload-artifact` 단계의 `No files were found with the provided path: artifacts/Windows/` 실패를 보고했다. punycode 문구는 Node 경고다. 업로드 경로를 파일 glob으로 바꾸고 업로드 전 산출물 목록 확인을 추가했다. 수정 workflow는 재실행 전이다.
+- 남은 사항 / 보류 이유: 수정사항을 푸시한 뒤 Actions를 다시 실행해 artifact를 내려받아 확인해야 한다.
 - 완료일:
 - 구현 기록: [1번 문서 FEAT-009 변경 이력](01_IMPLEMENTED.md#2026-11-25--feat-009--github-actions-windows-x64-플레이어-빌드), SYS-021.
 

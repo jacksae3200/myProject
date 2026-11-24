@@ -20,6 +20,30 @@
 
 ## 진행할 요청
 
+### BUG-011 — Windows 빌드 artifact가 업로드 경로에서 누락됨
+
+- 종류: CI/CD 버그
+- 상태: 검증 대기
+- 우선순위: P1
+- 작성일: 2026-11-25
+- 적용 환경: GitHub Actions `Windows Player Build`, self-hosted Windows x64 runner
+- 재현 여부: 재현됨. 사용자가 제공한 로그에서 업로드 단계가 `No files were found with the provided path: artifacts/Windows/`로 실패함.
+- 현재 동작: `actions/upload-artifact@v4`가 `artifacts/Windows/`에서 파일을 찾지 못해 job이 실패한다. 같은 단계의 `punycode` 문구는 Node deprecation 경고이며 업로드 실패 원인으로 보이지 않는다.
+- 원하는 동작: 생성된 Windows 플레이어 파일과 데이터 폴더를 workflow artifact로 업로드하고 내려받을 수 있다.
+- 재현 순서:
+  1. `Windows Player Build` workflow를 실행한다.
+  2. `Upload Windows build artifact` 단계의 경로 검색 결과를 확인한다.
+- 완료 기준:
+  - [x] 업로드 전에 빌드 출력 폴더의 실제 파일 목록과 크기를 로그에 남긴다.
+  - [x] 업로드 입력을 디렉터리 자체에서 하위 파일 glob으로 변경한다.
+  - [ ] Actions 재실행 후 artifact 업로드 및 다운로드를 확인한다.
+- 관련 요청 / 의존성: FEAT-009.
+- 원인 / 변경 파일: 업로드 glob을 `${{ github.workspace }}/artifacts/Windows/**`로 바꾸고 산출물 사전 확인을 추가했다. `WindowsPlayerBuild`는 최종 exe 존재 여부를 명시적으로 검사한다. `.github/workflows/windows-player-build.yml`, `Assets/CpcPrototype/Editor/WindowsPlayerBuild.cs`.
+- 검증 방법 / 결과: 변경 파일 및 기존 사용자 로그를 대조. 수정 workflow의 runner 실행 및 artifact 검증은 아직 하지 않았다.
+- 남은 사항: 변경사항을 푸시한 뒤 Actions 재실행 및 artifact 다운로드 확인.
+- 완료일:
+- 구현 기록: [1번 문서 BUG-011 변경 이력](01_IMPLEMENTED.md#2026-11-25--bug-011--windows-빌드-artifact-업로드-경로-수정), FEAT-009.
+
 
 ### BUG-001 — 과거 URP GPU Resident Drawer / Forward+ 경고 재확인
 

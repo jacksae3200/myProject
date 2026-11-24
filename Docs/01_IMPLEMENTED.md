@@ -44,7 +44,7 @@
 | SYS-018 | 탄약 규칙과 플레이어 연동 | 발사·재장전·잔탄 규칙을 순수 `AmmoInventory` Core로 분리하고 R키, 빈 탄창 자동 재장전, 탄약 HUD/소진 경고를 SurvivalPlayer에 연결 | FEAT-004. [AmmoInventory](../Assets/CpcPrototype/Core/AmmoInventory.cs), [SurvivalPlayer](../Assets/CpcPrototype/Survival/SurvivalPlayer.cs), [전투 안내](../Assets/CpcPrototype/Survival/CombatFeatures.md). NUnit 테스트 13개 통과(로컬 NUnit 실행), Unity 통합 플레이 미실행 |
 | SYS-019 | GitHub 업로드 정리 | 로컬 녹화·생성 프리뷰를 Git에서 제외하고 필수 100 MiB 초과 텍스처 3개를 Git LFS로 관리 | FEAT-007. 저장소 준비 과정이며 앱 실행 및 원격 푸시는 별도 |
 | SYS-020 | Windows 빌드 시작 씬 | `KayKit_DepthSurvival`을 유일한 활성 빌드 씬으로 설정. 로컬 Actions runner 폴더는 Git에서 제외 | FEAT-008. 씬 파일 경로·GUID 정적 확인, 실제 Player 빌드 미실행 |
-| SYS-021 | Windows Player CI 빌드 | self-hosted Windows x64 runner에서 Unity batch mode 빌드 후 GitHub Actions artifact로 보관 | FEAT-009. workflow·빌드 진입점 정적 확인; runner 실행 및 산출물 확인 대기 |
+| SYS-021 | Windows Player CI 빌드 | self-hosted Windows x64 runner에서 Unity batch mode 빌드 후 GitHub Actions artifact로 보관 | FEAT-009, BUG-011. 첫 실행의 artifact 업로드 실패를 수정 중; 재실행 및 산출물 확인 대기 |
 
 ## 상세 문서와 검증 시 주의점
 
@@ -58,6 +58,14 @@
 ## 변경 이력
 
 최신 항목을 위에 추가합니다. 기존 기능의 최초 구현 날짜는 확인되지 않아 임의로 부여하지 않았습니다.
+
+### 2026-11-25 — BUG-011 · Windows 빌드 artifact 업로드 경로 수정
+
+- 사용자가 제공한 Actions 로그에서 `actions/upload-artifact@v4`가 `artifacts/Windows/`에서 파일을 찾지 못해 실패한 것을 확인했습니다. `punycode` 메시지는 Node deprecation warning으로 기록했습니다.
+- artifact 경로를 `${{ github.workspace }}/artifacts/Windows/**`로 바꾸고, 업로드 직전에 폴더 안의 실제 파일 경로/크기를 출력하는 확인 단계를 추가했습니다. 빌드 출력 파일명도 `Game.exe`로 단순화하고 빌드 스크립트에서 최종 exe 존재를 확인합니다.
+- 검증: 정적 설정 변경. Actions 재실행, artifact 다운로드 및 Windows에서 실행 검증은 남아 있어 BUG-011은 검증 대기입니다.
+- 변경: `.github/workflows/windows-player-build.yml`, `Assets/CpcPrototype/Editor/WindowsPlayerBuild.cs`, `Docs/03_BUGS_AND_FIXES.md`, `Docs/02_FEATURE_REQUESTS.md`, `Docs/01_IMPLEMENTED.md`, `Docs/CI_CD.md`.
+- 다음 행동: 수정사항을 푸시한 뒤 Actions의 출력 파일 목록과 artifact를 확인합니다.
 
 ### 2026-11-25 — FEAT-008 · 생존 씬을 빌드 시작 씬으로 설정
 
@@ -73,7 +81,7 @@
 - `.github/workflows/windows-player-build.yml`은 `main` 푸시 및 수동 실행에서 Git LFS 파일을 체크아웃하고, `ProjectVersion.txt`와 일치하는 Unity Editor를 self-hosted Windows x64 runner에서 찾아 빌드합니다. 성공한 플레이어 파일을 14일 보관 Actions artifact로 업로드합니다. PR 이벤트는 self-hosted runner가 외부 PR 코드를 실행하지 않도록 트리거에 넣지 않았습니다.
 - 검증: 프로젝트 버전 6000.6.10f1, 활성 빌드 씬 경로와 파일 존재, workflow의 runner/수동 트리거/artifact 업로드, 빌드 진입점의 Windows x64 타깃을 정적 확인했습니다. `git diff --check` 통과. Unity Editor 빌드와 Actions runner 실행은 아직 수행하지 않았으므로 FEAT-009는 검증 대기입니다.
 - 변경: `Assets/CpcPrototype/Editor/WindowsPlayerBuild.cs` 및 `.meta`, `.github/workflows/windows-player-build.yml`, `Docs/02_FEATURE_REQUESTS.md`, `Docs/01_IMPLEMENTED.md`, `Docs/CI_CD.md`.
-- 다음 단계: 변경사항을 GitHub에 푸시한 뒤 **Actions → Windows Player Build → Run workflow**로 실행하고 `windows-player-<커밋 SHA>` artifact를 내려받아 확인합니다. itch.io 업로드는 이 workflow에 포함하지 않았습니다.
+- 첫 실행은 artifact 업로드 단계에서 `artifacts/Windows/` 경로에 파일이 없다는 오류로 끝났습니다(BUG-011). 업로드 glob과 산출물 확인 단계를 수정했으며, 재실행/다운로드가 남았습니다. itch.io 업로드는 이 workflow에 포함하지 않았습니다.
 
 ### 2026-11-24 — FEAT-007 · GitHub 업로드를 위한 저장소 정리
 
