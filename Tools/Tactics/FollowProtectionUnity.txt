@@ -1,0 +1,13 @@
+PASS
+Hold accepted
+Follow releases Hold and enables protection
+Follow permits autonomous combat without losing baseline directive
+existing melee/taunt/shield fallback can protect while following
+player moves away: disengage and rejoin rather than chase
+target death returns to Follow
+automatic priority prefers special zombie threatening player over nearer non-player threat
+explicit nearest policy selects closest player-relative candidate
+explicit type filter preserved
+explicit passive Follow still blocks ordinary autonomous combat
+Hold still stays put
+no observed candidate fails safely without repeatedly demanding target details

@@ -1,0 +1,66 @@
+PASS Play mode
+PASS Right-click away from a bulb does not grapple
+PASS Unmarked/null target refused
+PASS Bulb pointer selects green ready anchor
+PASS Actual right-click starts rope extension
+PASS Wait condition within 2000ms
+PASS Steep grounded hook starts a swing
+PASS Grounded swing reaches its destination
+PASS Swing maintains the initial radius across fixed-step motion
+PASS Swing ends on the opposite extension of the starting radius
+PASS Arrival automatically starts sniper and slow motion
+PASS First-person camera interpolates across frames
+PASS Wait condition within 2000ms
+PASS Rifle on back and sniper equipped
+PASS Own billboard hidden in first person
+PASS Distance-independent doubled resolution: Zombie 3-7
+PASS Distance-independent doubled resolution: Zombie 3
+PASS Distance-independent doubled resolution: Zombie 2-3
+PASS Distance-independent doubled resolution: Zombie 3-6
+PASS Distance-independent doubled resolution: Zombie 2-4
+PASS Distance-independent doubled resolution: Zombie 3-5
+PASS Distance-independent doubled resolution: Zombie 3-2
+PASS Distance-independent doubled resolution: Zombie 3-3
+PASS Distance-independent doubled resolution: Zombie 3-4
+PASS Distance-independent doubled resolution: Player | Helmet + hood
+PASS Distance-independent doubled resolution: Zombie 1-2
+PASS Distance-independent doubled resolution: Zombie 2-2
+PASS Distance-independent doubled resolution: Zombie 1-3
+PASS Distance-independent doubled resolution: Zombie 2
+PASS Distance-independent doubled resolution: Zombie 1
+PASS Distance-independent doubled resolution: CPC | Helmet
+PASS Wait condition within 1000ms
+PASS Held RMB scopes using unscaled aim time
+PASS scopeEyepoint centered in camera
+PASS Wait condition within 1000ms
+PASS Release RMB exits zoom
+PASS LMB fires one sniper shot
+PASS Sniper configured body damage applied through real raycast
+PASS Shot creates recoil
+PASS Sniper cooldown prevents immediate duplicate shot
+PASS Existing rifle tracer and bullet effect reused
+PASS Wait condition within 6500ms
+PASS Slow motion expires after approximately 5 real seconds
+PASS Time scale restored at timeout
+PASS Wait condition within 2000ms
+PASS Fixed timestep restored
+PASS Weapons restored after smooth third-person return
+PASS Player billboard restored
+PASS Pixel resolution override cleared
+PASS Hold released after sniper return
+PASS Low-angle hook accepted
+PASS Wait condition within 2000ms
+PASS Low-angle hook follows a circular path
+PASS Wait condition within 2500ms
+PASS Low-angle swing reaches its antipode
+PASS Airborne hook accepted
+PASS Unobstructed airborne swing passes under the bulb
+PASS A mid-arc obstacle does not block the initial rope shot
+PASS Wait condition within 2500ms
+PASS Collision on the arc cancels the grapple and hides the rope
+PASS Blocked hook is rejected
+PASS Hook available after obstacle removal
+PASS Wait condition within 4000ms
+PASS Disabling sniper restores time and releases grapple
+PASS Player loop advanced during all checks
+COMPLETE: real scene controllers, InputSystem, collision, camera, raycast damage and time restoration. Synthetic input; no microphone/model validation.

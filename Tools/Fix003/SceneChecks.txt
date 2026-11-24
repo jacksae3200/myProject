@@ -1,0 +1,12 @@
+PASS Edit mode after scene reload
+PASS Serialized player/sniper references
+PASS Both building renderer arrays preserved
+PASS Twelve buildings preserved
+PASS Four road tiles preserved
+PASS Downtown model prefab references retained
+PASS Twelve buildings and two sidewalks have collision
+PASS Six original anchors active
+PASS One-way platform references valid
+PASS Player and weapon references valid
+PASS No renderer left hidden in saved scene
+PASS Scene reload has no unsaved edits

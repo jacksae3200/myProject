@@ -1,0 +1,11 @@
+Unity 6000.6.3f1 | original vs standard-node Shader Graph | RGB pixel comparison
+PASS Default: mean RGB error 0.00000/255, max 0/255, pixels over 2/255 0/65536
+PASS NoDistortion: mean RGB error 0.00000/255, max 0/255, pixels over 2/255 0/65536
+PASS PositiveCurvature: mean RGB error 0.00000/255, max 0/255, pixels over 2/255 0/65536
+PASS NegativeCurvature: mean RGB error 0.00000/255, max 0/255, pixels over 2/255 0/65536
+PASS MaxZoom: mean RGB error 0.00000/255, max 0/255, pixels over 2/255 0/65536
+PASS SoftEdge: mean RGB error 0.00000/255, max 0/255, pixels over 2/255 0/65536
+PASS TransparentTint: mean RGB error 0.00000/255, max 0/255, pixels over 2/255 0/65536
+PASS ReverseFace: mean RGB error 0.00000/255, max 0/255, pixels over 2/255 0/65536
+PASS SmallAntialias: mean RGB error 0.00000/255, max 0/255, pixels over 2/255 0/4096
+PASS All seven original property reference names retained; original shader and production material were not changed during comparison.

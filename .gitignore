@@ -1,0 +1,25 @@
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[Uu]ser[Ss]ettings/
+[Mm]emoryCaptures/
+.vs/
+*.csproj
+*.sln
+*.slnx
+*.user
+*.suo
+
+.plastic/
+Training/Cpc/runs/
+Tools/Voice/whisper.cpp/
+
+# Local test recordings and generated texture previews
+Recordings/
+Assets/VikingTexturePreview/
+CpcCleanVideos/
+CpcTacticalVideos/
+CpcComparisonVideos/

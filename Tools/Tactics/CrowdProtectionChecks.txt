@@ -1,0 +1,13 @@
+PASS
+crowd protection wired
+two enemies stay below three-enemy threshold
+three enemies trigger real NavMesh return, crowd-facing shield and preserved Hold
+emergency guard suspends rather than replaces player directive
+real player-targeted melee is intercepted: player loses 0, CPC loses 2 of 10
+low-health retreat outranks crowd guard and retains directive
+crowd guard can resume after health recovery
+disabled component stops automatic crowd protection
+lost navigation cancels crowd state without movement
+pressure clears with hysteresis and CPC returns to original Hold anchor
+wall-occluded enemies do not cause hidden crowd detection
+unreachable protection destination rejected

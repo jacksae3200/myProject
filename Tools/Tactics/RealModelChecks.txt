@@ -1,0 +1,94 @@
+PASS
+scene wiring and CPC NavMesh
+REAL Spitter native phase -> local model Intercept -> Unity execution; 침을 뱉으려 한다. 내가 막아내지.
+REAL Burrower native phase -> local model Evade -> Unity execution; 땅이 흔들린다! 위험 범위에서 벗어나!
+REAL Crawler native phase -> local model Counterattack -> Unity execution; 빈틈이 보였다. 지금이다!
+REAL chat UI 여기서 기다려 줘 -> Hold; 알았어, 여기서 기다리지.
+REAL model Hold persists beyond six seconds
+REAL status question keeps exact Hold directive; 주변 경계하면서 네가 말한 곳에서 대기 중이야.
+REAL chat UI 이제 다시 따라와 -> Follow; 알았어, 다시 움직이자.
+REAL targeted chat 저기 침 뱉는 놈부터 잡아 -> Attack; 알았어, 저 침 뱉는 놈부터 처리하지.
+REAL targeted chat 내 앞에서 침 좀 막아줘 -> Intercept; 걱정 마, 내가 막아낼게.
+REAL danger question keeps exact instruction; 저 침 뱉는 놈이 제일 까다로워. 멀리서 공격하니까 조심해야 해.
+REAL ambiguous target asks clarification without replacing instruction; 어떤 놈을 먼저 처리할까? 말해줘.
+REAL Crawler chat selects taunt/attack; 알았어, 저 기어오는 놈부터 처리하지.
+
+[CPC/Request/SituationLlm] generation=2 observations=1
+[CPC/HTTP] POST http://127.0.0.1:11434/api/chat / gemma4:12b / event
+[CPC/Ollama Metrics] event / prompt_eval_count=1328, eval_count=44, eval_duration=3134643000 ns (3.135 s)
+[CPC/Proposed/SituationLlm] intercept zombie_206243:256 intent=command
+[CPC/Selected/SituationLlm] Intercept zombie_206243:256
+[CPC/Gemma] 침을 뱉으려 한다. 내가 막아내지.
+[CPC/Execute/SituationLlm] Intercept
+[CPC/Request/SituationLlm] generation=3 observations=1
+[CPC/HTTP] POST http://127.0.0.1:11434/api/chat / gemma4:12b / event
+[CPC/Ollama Metrics] event / prompt_eval_count=1323, eval_count=43, eval_duration=3032005000 ns (3.032 s)
+[CPC/Proposed/SituationLlm] evade zombie_205518:256 intent=command
+[CPC/Selected/SituationLlm] Evade zombie_205518:256
+[CPC/Gemma] 땅이 흔들린다! 위험 범위에서 벗어나!
+[CPC/Execute/SituationLlm] Evade
+[CPC/Request/SituationLlm] generation=4 observations=1
+[CPC/HTTP] POST http://127.0.0.1:11434/api/chat / gemma4:12b / event
+[CPC/Ollama Metrics] event / prompt_eval_count=1325, eval_count=40, eval_duration=2804573000 ns (2.805 s)
+[CPC/Proposed/SituationLlm] counterattack zombie_206041:256 intent=command
+[CPC/Selected/SituationLlm] Counterattack zombie_206041:256
+[CPC/Gemma] 빈틈이 보였다. 지금이다!
+[CPC/Execute/SituationLlm] Counterattack
+[CPC/Request/PlayerCommand] generation=6 observations=0
+[CPC/HTTP] 채팅 요청 접수
+[CPC/HTTP] POST http://127.0.0.1:11434/api/chat / gemma4:12b / chat
+[CPC/Ollama Metrics] chat / prompt_eval_count=1337, eval_count=24, eval_duration=2157442000 ns (2.157 s)
+[CPC/Proposed/PlayerCommand] hold  intent=command
+[CPC/Selected/PlayerCommand] Hold 
+[CPC/Gemma] 알았어, 여기서 기다리지.
+[CPC/Execute/PlayerCommand] Hold
+[CPC/Request/PlayerCommand] generation=7 observations=0
+[CPC/HTTP] 채팅 요청 접수
+[CPC/HTTP] POST http://127.0.0.1:11434/api/chat / gemma4:12b / chat
+[CPC/Ollama Metrics] chat / prompt_eval_count=1361, eval_count=32, eval_duration=3824543000 ns (3.825 s)
+[CPC/Proposed/PlayerCommand] none  intent=question
+[CPC/Gemma] 주변 경계하면서 네가 말한 곳에서 대기 중이야.
+[CPC/Request/PlayerCommand] generation=8 observations=0
+[CPC/HTTP] 채팅 요청 접수
+[CPC/HTTP] POST http://127.0.0.1:11434/api/chat / gemma4:12b / chat
+[CPC/Ollama Metrics] chat / prompt_eval_count=1390, eval_count=24, eval_duration=2196311000 ns (2.196 s)
+[CPC/Proposed/PlayerCommand] follow  intent=command
+[CPC/Selected/PlayerCommand] Follow 
+[CPC/Gemma] 알았어, 다시 움직이자.
+[CPC/Execute/PlayerCommand] Follow
+[CPC/Request/PlayerCommand] generation=9 observations=1
+[CPC/HTTP] 채팅 요청 접수
+[CPC/HTTP] POST http://127.0.0.1:11434/api/chat / gemma4:12b / chat
+[CPC/Ollama Metrics] chat / prompt_eval_count=1604, eval_count=45, eval_duration=3209916000 ns (3.210 s)
+[CPC/Proposed/PlayerCommand] attack zombie_206243:256 intent=command
+[CPC/Selected/PlayerCommand] Attack zombie_206243:256
+[CPC/Gemma] 알았어, 저 침 뱉는 놈부터 처리하지.
+[CPC/Execute/PlayerCommand] Attack
+[CPC/Request/PlayerCommand] generation=10 observations=1
+[CPC/HTTP] 채팅 요청 접수
+[CPC/HTTP] POST http://127.0.0.1:11434/api/chat / gemma4:12b / chat
+[CPC/Ollama Metrics] chat / prompt_eval_count=1647, eval_count=40, eval_duration=2764058000 ns (2.764 s)
+[CPC/Proposed/PlayerCommand] intercept zombie_206243:256 intent=command
+[CPC/Selected/PlayerCommand] Intercept zombie_206243:256
+[CPC/Gemma] 걱정 마, 내가 막아낼게.
+[CPC/Execute/PlayerCommand] Intercept
+[CPC/Request/PlayerCommand] generation=11 observations=1
+[CPC/HTTP] 채팅 요청 접수
+[CPC/HTTP] POST http://127.0.0.1:11434/api/chat / gemma4:12b / chat
+[CPC/Ollama Metrics] chat / prompt_eval_count=1659, eval_count=41, eval_duration=3211135000 ns (3.211 s)
+[CPC/Proposed/PlayerCommand] none  intent=question
+[CPC/Gemma] 저 침 뱉는 놈이 제일 까다로워. 멀리서 공격하니까 조심해야 해.
+[CPC/Request/PlayerCommand] generation=13 observations=2
+[CPC/HTTP] 채팅 요청 접수
+[CPC/HTTP] POST http://127.0.0.1:11434/api/chat / gemma4:12b / chat
+[CPC/Ollama Metrics] chat / prompt_eval_count=1618, eval_count=31, eval_duration=2986003000 ns (2.986 s)
+[CPC/Proposed/PlayerCommand] none  intent=clarify
+[CPC/Gemma] 어떤 놈을 먼저 처리할까? 말해줘.
+[CPC/Request/PlayerCommand] generation=14 observations=2
+[CPC/HTTP] 채팅 요청 접수
+[CPC/HTTP] POST http://127.0.0.1:11434/api/chat / gemma4:12b / chat
+[CPC/Ollama Metrics] chat / prompt_eval_count=1658, eval_count=44, eval_duration=3302781000 ns (3.303 s)
+[CPC/Proposed/PlayerCommand] attack zombie_206041:256 intent=command
+[CPC/Selected/PlayerCommand] Attack zombie_206041:256
+[CPC/Gemma] 알았어, 저 기어오는 놈부터 처리하지.
+[CPC/Execute/PlayerCommand] Attack

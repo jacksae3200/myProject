@@ -1,0 +1,75 @@
+PASS
+scene wiring and CPC NavMesh
+chat path -> persistent Hold survives six seconds
+question keeps player directive
+Follow replaces Hold and resumes navigation
+intercept intent -> planned movement and shield
+physical projectile/trigger interception applies existing 80% shield reduction
+counterattack reuses existing timed melee damage
+existing taunt still redirects zombie target
+dormant hidden burrow omitted from sensor
+native emergence warning exposes cue position, not hidden body position
+evade leaves danger radius using NavMesh
+short warning triggers safety without waiting for LLM
+safety execution logged separately from model choice
+low-health retreat suspends rather than deletes player Hold
+valid player directive resumes after recovery
+malformed JSON rejected without changing directive
+expired response rejected
+changed attack phase invalidates in-flight model response
+dead target rejected
+missing navigation rejected before acceptance speech
+unchanged signal does not flood model requests
+local model connection failure keeps game ticking and existing instruction
+
+[CPC/Request/PlayerCommand] generation=2 observations=0
+[CPC/HTTP] 채팅 요청 접수
+[CPC/Fallback] 지금은 응답을 받지 못했어. 플레이어 근처에서 경계 중.
+[CPC/Proposed/PlayerCommand] hold  intent=command
+[CPC/Selected/PlayerCommand] Hold 
+[CPC/Execute/PlayerCommand] Hold
+[CPC/Proposed/PlayerCommand] none  intent=question
+[CPC/Request/PlayerCommand] generation=3 observations=0
+[CPC/HTTP] 채팅 요청 접수
+[CPC/Fallback] 지금은 응답을 받지 못했어. 지시한 위치에서 대기 중.
+[CPC/Proposed/PlayerCommand] follow  intent=command
+[CPC/Selected/PlayerCommand] Follow 
+[CPC/Execute/PlayerCommand] Follow
+[CPC/Request/PlayerCommand] generation=6 observations=1
+[CPC/HTTP] 채팅 요청 접수
+[CPC/Fallback] 지금은 응답을 받지 못했어. 플레이어 근처에서 경계 중.
+[CPC/Proposed/PlayerCommand] intercept zombie_232562:256 intent=command
+[CPC/Selected/PlayerCommand] Intercept zombie_232562:256
+[CPC/Execute/PlayerCommand] Intercept
+[CPC/Shield] Projectile intercepted
+[CPC/Proposed/PlayerCommand] counterattack zombie_232359:256 intent=command
+[CPC/Selected/PlayerCommand] Counterattack zombie_232359:256
+[CPC/Execute/PlayerCommand] Counterattack
+[CPC/Proposed/PlayerCommand] evade zombie_232562:256 intent=command
+[CPC/Selected/PlayerCommand] Evade zombie_232562:256
+[CPC/Execute/PlayerCommand] Evade
+[CPC/Safety] Intercept zombie_232562:256 phase=Aiming remaining=0.80
+[CPC/Execute/Safety] Intercept
+[CPC/Proposed/PlayerCommand] hold  intent=command
+[CPC/Selected/PlayerCommand] Hold 
+[CPC/Safety] emergency retreat; player directive suspended, not erased
+[CPC/Retreat] 체력이 부족해! 네 뒤로 물러날게.
+[CPC/Execute/PlayerCommand] Hold
+[CPC/Reject/PlayerCommand] 전술 응답 형식이 잘못되어 행동을 유지할게.
+[CPC/Proposed/PlayerCommand] follow  intent=
+[CPC/Reject/PlayerCommand] 오래된 전술 응답은 실행하지 않을게.
+[CPC/Proposed/SituationLlm] intercept zombie_232562:256 intent=command
+[CPC/Reject/SituationLlm] 공격 단계가 바뀌어 이전 전술은 실행하지 않을게.
+[CPC/Proposed/PlayerCommand] attack zombie_232562:256 intent=command
+[CPC/Reject/PlayerCommand] 지금 관측한 적 중에는 그 행동을 안전하게 할 대상이 없어.
+[CPC/Proposed/PlayerCommand] attack zombie_232562:256 intent=command
+[CPC/Reject/PlayerCommand] 이동할 NavMesh가 없어.
+[CPC/Request/SituationLlm] generation=20 observations=1
+[CPC/Proposed/PlayerCommand] hold  intent=command
+[CPC/Selected/PlayerCommand] Hold 
+[CPC/Execute/PlayerCommand] Hold
+[CPC/Request/PlayerCommand] generation=21 observations=1
+[CPC/HTTP] 채팅 요청 접수
+[CPC/HTTP] POST http://127.0.0.1:1/api/chat / gemma4:e4b-it-q4_K_M / chat
+[CPC/LLM] Cannot connect to destination host . 기본 대사를 사용합니다. 주소와 모델명을 확인하세요.
+[CPC/Fallback] 지금은 응답을 받지 못했어. 지시한 위치에서 대기 중.

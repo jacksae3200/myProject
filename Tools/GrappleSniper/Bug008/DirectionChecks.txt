@@ -1,0 +1,9 @@
+PASS Left start starts
+PASS Left start stays on the blue side of the starting line
+PASS Left start reaches the same antipode
+PASS Right start starts
+PASS Right start stays on the blue side of the starting line
+PASS Right start reaches the same antipode
+PASS Blocked blue arc starts
+PASS Blocked blue arc stays on the blue side of the starting line
+PASS Obstacle cancels the swing without selecting the red arc

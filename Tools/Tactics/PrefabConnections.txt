@@ -1,0 +1,8 @@
+Survival scene: player/chat/CPC/tactics/sensor/motor/LLM connected
+Model=gemma4:12b
+Boomer -> BoomerZombieAbility
+Burrower -> BurrowerZombieAbility
+Crawler -> CrawlerZombieAbility
+Jumper -> JumperZombieAbility
+Normal -> normal AI
+Spitter -> SpitterZombieAbility

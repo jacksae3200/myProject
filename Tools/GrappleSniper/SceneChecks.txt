@@ -1,0 +1,15 @@
+PASS Scene reload preserves player action references
+PASS All six non-colliding bulb anchors survive scene reload
+PASS Back and real hand sockets saved
+PASS Both hand grip references saved
+PASS Reusable prefab support marker is unique
+PASS Parked scope camera and listener remain disabled
+PASS Back-mounted sniper uses player's pixel capture layer
+PASS Scope capture and lens preserved
+PASS Scene uses new reusable sniper prefab
+PASS Reusable prefab defaults to camera disabled
+PASS AWM and lens dependencies migrated by GUID
+PASS Sniper material shaders have no compile errors
+PASS Fullscreen pixel material reference and base value survive reload
+PASS Bulb colliders remain removed after scene reload
+PASS Test-only timing changes were not saved

@@ -1,0 +1,20 @@
+PASS Left start starts
+PASS Left start stays on the blue side of the starting line
+PASS Left start bends away from the camera in plan view
+PASS Left start reaches the opposite side at half radius
+PASS Right start starts
+PASS Right start stays on the blue side of the starting line
+PASS Right start bends away from the camera in plan view
+PASS Right start reaches the opposite side at half radius
+PASS Blocked blue arc starts
+PASS Blocked blue arc stays on the blue side of the starting line
+PASS Blocked blue arc bends away from the camera in plan view
+PASS Obstacle cancels the swing without selecting the red arc
+PASS Left start with camera on the opposite side starts
+PASS Left start with camera on the opposite side stays on the blue side of the starting line
+PASS Left start with camera on the opposite side bends away from the camera in plan view
+PASS Left start with camera on the opposite side reaches the opposite side at half radius
+PASS Right start with camera on the opposite side starts
+PASS Right start with camera on the opposite side stays on the blue side of the starting line
+PASS Right start with camera on the opposite side bends away from the camera in plan view
+PASS Right start with camera on the opposite side reaches the opposite side at half radius

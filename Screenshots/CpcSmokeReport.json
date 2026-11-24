@@ -1,0 +1,75 @@
+{
+    "Checks": [
+        {
+            "Name": "WASD movement",
+            "Passed": true,
+            "Detail": "distance=2.169999"
+        },
+        {
+            "Name": "Shift run",
+            "Passed": true,
+            "Detail": "walk=2.169999, run=3.899999"
+        },
+        {
+            "Name": "Space jump",
+            "Passed": true,
+            "Detail": "height=0.9182982"
+        },
+        {
+            "Name": "CPC synchronized jump",
+            "Passed": true,
+            "Detail": "height=0.9182982"
+        },
+        {
+            "Name": "Left click melee",
+            "Passed": true,
+            "Detail": "before=100, after=75"
+        },
+        {
+            "Name": "CPC follow",
+            "Passed": true,
+            "Detail": "distance=1.8"
+        },
+        {
+            "Name": "BT chase",
+            "Passed": true,
+            "Detail": "Chase"
+        },
+        {
+            "Name": "BT return",
+            "Passed": true,
+            "Detail": "Return"
+        },
+        {
+            "Name": "BT home idle",
+            "Passed": true,
+            "Detail": "Idle, home distance=0.25"
+        },
+        {
+            "Name": "BT attack / player damage",
+            "Passed": true,
+            "Detail": "state=Attack, HP=90"
+        },
+        {
+            "Name": "CPC damage",
+            "Passed": true,
+            "Detail": "HP=95"
+        },
+        {
+            "Name": "Monster death",
+            "Passed": true,
+            "Detail": "Dead"
+        },
+        {
+            "Name": "Dead monster stops attacking",
+            "Passed": true,
+            "Detail": "HP=90"
+        },
+        {
+            "Name": "Player death stops movement",
+            "Passed": true,
+            "Detail": "HP=0"
+        }
+    ],
+    "Completed": true
+}

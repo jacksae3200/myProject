@@ -1,0 +1,14 @@
+PASS Boundary hook starts
+PASS Opening chat cancels grapple and sniper
+PASS Chat cancellation restores both time settings
+PASS Boundary hook starts
+PASS Focus-loss callback restores equipment and time
+PASS Boundary hook starts
+PASS Death cancels cinematic without leaving slow motion
+PASS Grapple starts before obstacle is introduced
+PASS Obstruction appearing during rope extension cancels hook
+PASS Boundary hook starts
+PASS Active sniper is not cut short by grapple hold timeout
+PASS Normal WASD movement resumes after sniper exit
+PASS Existing rifle LMB damage still works after weapon restoration
+COMPLETE: chat, focus callback, death, mid-flight obstruction, configurable hold and normal rifle/movement regression.

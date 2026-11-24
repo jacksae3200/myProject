@@ -1,0 +1,24 @@
+using System;using System.IO;using System.Linq;using System.Text;using System.Threading.Tasks;using UnityEngine;using UnityEngine.InputSystem;using UnityEngine.InputSystem.LowLevel;using CpcPrototype;
+public static class GrappleSniperBoundaryChecks
+{
+ private static StringBuilder _report=new StringBuilder();
+ private static void Check(bool ok,string label){_report.AppendLine((ok?"PASS ":"FAIL ")+label);File.WriteAllText("Tools/GrappleSniper/BoundaryChecks.txt",_report.ToString());if(!ok)throw new Exception(label);}
+ private static async Task Wait(Func<bool> test){float end=Time.realtimeSinceStartup+4f;while(!test()&&Time.realtimeSinceStartup<end)await Task.Delay(20);if(!test())throw new Exception("Timed out waiting for sniper entry");}
+ private static void Place(SurvivalPlayer p,Vector3 v){var c=p.GetComponent<CharacterController>();c.enabled=false;p.transform.position=v;c.enabled=true;p.ResetMotion();Physics.SyncTransforms();}
+ public static async Task<string> Execute()
+ {
+ var p=UnityEngine.Object.FindAnyObjectByType<SurvivalPlayer>();var g=p.Grapple;var s=p.GrappleSniper;var previous=Mouse.current;var previousKeyboard=Keyboard.current;var mouse=InputSystem.AddDevice<Mouse>("BoundaryMouse");var keyboard=InputSystem.AddDevice<Keyboard>("BoundaryKeyboard");mouse.MakeCurrent();keyboard.MakeCurrent();float scale=Time.timeScale;float fixedTime=Time.fixedDeltaTime;
+ var lamp=g.Anchors.OrderBy(a=>(a.Position-p.transform.position).sqrMagnitude).First();
+ async Task Begin(){Place(p,new Vector3(lamp.Position.x,.04f,lamp.Position.z-.32f));await Task.Delay(150);Check(g.TryBegin(lamp),"Boundary hook starts");await Wait(()=>s.IsActive);}
+ try{
+ await Begin();p.Chat.Open();await Task.Delay(100);Check(!s.IsActive&&g.Phase==GrapplePhase.Idle,"Opening chat cancels grapple and sniper");Check(Mathf.Approximately(Time.timeScale,scale)&&Mathf.Approximately(Time.fixedDeltaTime,fixedTime),"Chat cancellation restores both time settings");p.Chat.Close();
+ await Begin();g.SendMessage("OnApplicationFocus",false);await Task.Delay(100);Check(!s.IsActive&&g.Phase==GrapplePhase.Idle&&Mathf.Approximately(Time.timeScale,scale),"Focus-loss callback restores equipment and time");
+ await Begin();p.Health.TakeDamage(p.Health.MaxHealth,p.gameObject);await Task.Delay(100);Check(!s.IsActive&&g.Phase==GrapplePhase.Idle&&Mathf.Approximately(Time.timeScale,scale),"Death cancels cinematic without leaving slow motion");p.Health.Configure(CombatTeam.Player,10000f);
+ Place(p,new Vector3(lamp.Position.x,.04f,lamp.Position.z-.32f));await Task.Delay(100);Check(g.TryBegin(lamp),"Grapple starts before obstacle is introduced");var wall=GameObject.CreatePrimitive(PrimitiveType.Cube);wall.transform.position=Vector3.Lerp(p.GetComponent<CharacterController>().bounds.center,lamp.Position,.5f);wall.transform.localScale=new Vector3(.3f,.12f,.12f);Physics.SyncTransforms();await Task.Delay(200);Check(g.Phase==GrapplePhase.Idle&&!s.IsActive,"Obstruction appearing during rope extension cancels hook");UnityEngine.Object.Destroy(wall);await Task.Delay(100);
+ s.SlowMotionSeconds=2f;g.MaximumHoldSeconds=.1f;await Begin();await Task.Delay(450);Check(s.IsActive&&g.Phase==GrapplePhase.Holding,"Active sniper is not cut short by grapple hold timeout");s.RestoreImmediately();
+ Place(p,new Vector3(lamp.Position.x,.04f,lamp.Position.z-.32f));await Task.Delay(200);Vector3 start=p.transform.position;InputSystem.QueueStateEvent(keyboard,new KeyboardState(Key.D));await Task.Delay(180);InputSystem.QueueStateEvent(keyboard,new KeyboardState());await Task.Delay(60);Check(Vector3.Distance(start,p.transform.position)>.03f,"Normal WASD movement resumes after sniper exit");
+ var target=GameObject.CreatePrimitive(PrimitiveType.Cube);target.name="Rifle Regression Target";target.transform.position=p.Muzzle.position+Vector3.right*.7f;target.transform.localScale=Vector3.one*.2f;var hp=target.AddComponent<Health>();hp.Configure(CombatTeam.Monster,500f);Physics.SyncTransforms();Vector2 screen=p.View.WorldToScreenPoint(target.transform.position);InputSystem.QueueStateEvent(mouse,new MouseState{position=screen});await Task.Delay(150);InputSystem.QueueStateEvent(mouse,new MouseState{position=screen,buttons=1});await Task.Delay(70);InputSystem.QueueStateEvent(mouse,new MouseState{position=screen});await Task.Delay(50);Check(hp.Current<500f,"Existing rifle LMB damage still works after weapon restoration");UnityEngine.Object.Destroy(target);
+ _report.AppendLine("COMPLETE: chat, focus callback, death, mid-flight obstruction, configurable hold and normal rifle/movement regression.");return _report.ToString();
+ }finally{s.RestoreImmediately();g.Release();if(p.IsChatOpen)p.Chat.Close();InputSystem.RemoveDevice(mouse);InputSystem.RemoveDevice(keyboard);previous?.MakeCurrent();previousKeyboard?.MakeCurrent();File.WriteAllText("Tools/GrappleSniper/BoundaryChecks.txt",_report.ToString());}
+ }
+}

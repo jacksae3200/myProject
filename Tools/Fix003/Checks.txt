@@ -1,0 +1,32 @@
+PASS Actual Unity Play mode
+PASS Four continuous Downtown road/sidewalk tiles
+PASS Six Downtown buildings on each side
+PASS All imported materials have supported shaders
+PASS All six gameplay grapple anchors retained
+PASS Third-person chooses camera-side south row
+PASS Scope camera is excluded from third-person culling
+PASS Actual render callback hides only south buildings
+PASS Renderer states restored after rendering
+PASS Reverse camera side chooses north row
+PASS Road ground collision x=-11
+PASS Road ground collision x=-9
+PASS Road ground collision x=-7
+PASS Road ground collision x=-5
+PASS Road ground collision x=-3
+PASS Road ground collision x=-1
+PASS Road ground collision x=1
+PASS Road ground collision x=3
+PASS Road ground collision x=5
+PASS Road ground collision x=7
+PASS Road ground collision x=9
+PASS Road ground collision x=11
+PASS Twelve building colliders remain active when visuals are culled
+PASS Actual D input moves player on replacement road
+PASS Rifle input fires after environment replacement
+PASS Grapple begins with retained anchor
+PASS First-person removes building culling
+PASS Actual first-person and scope renders show both rows
+PASS RMB scope aiming works
+PASS Third-person return reapplies camera-side culling
+PASS Disabling culling leaves no hidden renderers
+PASS Player loop advances throughout tests

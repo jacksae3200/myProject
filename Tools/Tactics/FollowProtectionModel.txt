@@ -1,0 +1,5 @@
+PASS
+REAL Hold accepted
+REAL Follow defaults to protect mode
+REAL autonomous protection accepted while Follow stays active: Intercept
+REAL underspecified combat request selects target instead of asking: 알았어. 저 Spitter부터 처리하지.

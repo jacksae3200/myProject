@@ -1,0 +1,17 @@
+PASS Actual Play mode
+PASS Six bulb platforms have no physical collider
+PASS Deleted one-way platform references removed
+PASS Active fullscreen material base value is 200
+PASS Grapple accepts marker without bulb collider
+PASS Third-person camera, fullscreen pixels and time scale remain unchanged throughout grapple travel
+PASS First-person entry starts only after grapple arrival
+PASS Actual screen pixel height doubles 200 to 400 in first person
+PASS Actor pixel capture doubling still works
+PASS Normal third-person return restores exact screen pixel value
+PASS Grapple accepts marker without bulb collider
+PASS Custom screen pixel value 173 doubles to 346
+PASS Chat cancellation restores custom pixel value
+PASS Grapple accepts marker without bulb collider
+PASS Disable restores pixel value and releases grapple
+PASS Player falls through the former bulb platform instead of standing on it
+PASS Player loop advances throughout checks

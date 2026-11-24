@@ -1,0 +1,20 @@
+PASS
+silence does not start sliding inference
+speech starts STT while M is still held
+partial text is UI-only
+VAD final sends once before M release and keeps listening
+complete short-window result is reused without final retranscription
+duplicate callback cannot resubmit final
+separate utterances with identical words are not incorrectly deduplicated
+M release frees microphone without duplicate dispatch
+rolling request is bounded by window length
+slow STT cannot create a concurrent or unbounded request backlog
+long utterance final rechecks full audio instead of submitting a truncated tail
+long utterance final preserves full command and records comparison metrics
+rapid repress invalidates previous session callbacks
+focus loss cancels partial/final work and releases capture
+typing M in chat cannot start sliding capture
+mode switch cancels previous mode without mixing results
+batch comparison mode still waits for M release
+batch final path preserved with separately labeled metrics
+sliding STT failure is visible and cannot send partial text

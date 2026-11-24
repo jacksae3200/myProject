@@ -1,0 +1,10 @@
+PASS
+batch: no CPC request before release
+BatchInference: real STT final reaches existing CPC input once; CPC 응답 대기 중 · 인식: 여기서 기다려줘.
+BatchInference: single final handed to CpcTactics/LocalLlmClient
+MEASURE BatchInference text=여기서 기다려줘. requests=1 end_to_submit_ms=4954 reused=False full_final=True
+SlidingWindow: real STT final reaches existing CPC input once; CPC 응답 대기 중 · M 녹음 계속 · 인식: 여기서 기다려줘.
+SlidingWindow: single final handed to CpcTactics/LocalLlmClient
+sliding: real /inference started before speech end; final submitted while M held
+sliding: release after VAD final does not duplicate CPC request
+MEASURE SlidingWindow text=여기서 기다려줘. requests=2 end_to_submit_ms=4595 reused=False full_final=True

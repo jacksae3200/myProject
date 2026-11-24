@@ -1,0 +1,1 @@
+Top: original 3D rendered at 2048x2048 per character. Bottom: same source model, pose and camera projection rendered at 32/64/128/256. Both rows use identical Quad scale and orientation, vertically offset only. State: 10_IdleCombat, normalized time 0.35, paused.

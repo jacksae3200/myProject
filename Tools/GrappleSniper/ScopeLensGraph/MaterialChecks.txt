@@ -1,0 +1,4 @@
+PASS replaced Assets/sniper/ScopeLens/ScopeLens.mat; both textures, four floats and tint preserved.
+PASS material reload uses CpcPrototype/ScopeLensGraph; original ScopeLens.shader remains present.
+PASS existing AWM prefab lens uses the replaced shared material.
+PASS loaded scene lenses use the Shader Graph without changing scene transforms.

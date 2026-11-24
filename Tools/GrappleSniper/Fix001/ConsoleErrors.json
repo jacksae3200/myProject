@@ -1,0 +1,41 @@
+{
+  "success": true,
+  "command": "command",
+  "data": {
+    "command": "console get",
+    "parameters": {
+      "tail": "10",
+      "level": "error"
+    },
+    "result": {
+      "entries": [],
+      "cursor": 707990,
+      "session": "eac6c1256ba5454b9b3232847fb9829f",
+      "returned": 0,
+      "dropped": false,
+      "reset": false,
+      "counts": {
+        "error": 0,
+        "warn": 2000,
+        "log": 0
+      },
+      "groundTruth": {
+        "sampledUtc": "2026-11-16T18:41:04.4901801Z",
+        "ageMs": 116,
+        "compilationFailed": false,
+        "compiling": false,
+        "consoleErrors": 0,
+        "consoleWarnings": 15235,
+        "consoleLogs": 8,
+        "seeded": true
+      }
+    },
+    "target": {
+      "host": "127.0.0.1",
+      "port": 7801,
+      "projectPath": "C:\\Users\\Jacksae\\Desktop\\unityProject\\My project"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}
