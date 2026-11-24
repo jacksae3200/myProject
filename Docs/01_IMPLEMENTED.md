@@ -61,8 +61,8 @@
 
 ### 2026-11-25 — BUG-011 · Windows 빌드 artifact 업로드 경로 수정
 
-- 최신 실행 로그에서 runner 임시 폴더의 산출물 확인은 통과하고 `upload-artifact`가 절대 경로 glob에서 파일을 찾지 못한 것을 확인했습니다. Unity 산출물을 workspace `artifacts/Windows`로 복사해 상대 경로로 업로드하도록 바꾸고, 해당 폴더를 `.gitignore`에 추가했습니다.
-- 검증: GitHub 로그에서 업로드 단계까지 도달함을 확인했습니다. workspace 복사 및 상대 경로 artifact 업로드는 재실행 전이므로 BUG-011은 검증 대기입니다.
+- 최신 실행 로그에서 runner 임시 출력 확인과 workspace 복사 단계를 통과한 뒤, `upload-artifact`가 상대 경로 디렉터리 입력에서 파일을 찾지 못한 것을 확인했습니다. 업로드 입력을 `${{ github.workspace }}\artifacts\Windows`로 지정하고, workspace 절대 경로와 파일 경로를 사전에 출력하도록 바꿨습니다. 생성 폴더는 `.gitignore`에 추가했습니다.
+- 검증: GitHub 로그에서 upload 단계에 도달함을 확인했습니다. 새 absolute path 입력 재실행은 남아 있어 BUG-011은 검증 대기입니다.
 - 변경: `.github/workflows/windows-player-build.yml`, `.gitignore`, `Assets/CpcPrototype/Editor/WindowsPlayerBuild.cs`, `Docs/03_BUGS_AND_FIXES.md`, `Docs/02_FEATURE_REQUESTS.md`, `Docs/01_IMPLEMENTED.md`, `Docs/CI_CD.md`.
 - 다음 행동: 수정사항을 푸시한 뒤 Actions의 출력 파일 목록과 artifact를 확인합니다.
 
@@ -80,7 +80,7 @@
 - `.github/workflows/windows-player-build.yml`은 `main` 푸시 및 수동 실행에서 Git LFS 파일을 체크아웃하고, `ProjectVersion.txt`와 일치하는 Unity Editor를 self-hosted Windows x64 runner에서 찾아 빌드합니다. 성공한 플레이어 파일을 14일 보관 Actions artifact로 업로드합니다. PR 이벤트는 self-hosted runner가 외부 PR 코드를 실행하지 않도록 트리거에 넣지 않았습니다.
 - 검증: 프로젝트 버전 6000.6.10f1, 활성 빌드 씬 경로와 파일 존재, workflow의 runner/수동 트리거/artifact 업로드, 빌드 진입점의 Windows x64 타깃을 정적 확인했습니다. `git diff --check` 통과. Unity Editor 빌드와 Actions runner 실행은 아직 수행하지 않았으므로 FEAT-009는 검증 대기입니다.
 - 변경: `Assets/CpcPrototype/Editor/WindowsPlayerBuild.cs` 및 `.meta`, `.github/workflows/windows-player-build.yml`, `Docs/02_FEATURE_REQUESTS.md`, `Docs/01_IMPLEMENTED.md`, `Docs/CI_CD.md`.
-- 첫 실행은 workspace 출력 폴더가 비었고, 이후 실행은 runner 임시 폴더의 산출물 확인 후 artifact 절대 경로 glob에서 실패했습니다(BUG-011). 이제 확인한 파일을 workspace `artifacts/Windows`로 복사해 상대 경로로 올립니다. 수정 workflow 재실행/다운로드가 남았습니다. itch.io 업로드는 이 workflow에 포함하지 않았습니다.
+- 앞선 실행들은 출력 폴더가 비거나 upload-artifact 입력 경로에서 파일을 찾지 못해 종료됐습니다(BUG-011). 확인한 파일을 workspace `artifacts/Windows`로 복사하고 절대 경로 입력으로 올리도록 수정했습니다. 수정 workflow 재실행/다운로드가 남았습니다. itch.io 업로드는 이 workflow에 포함하지 않았습니다.
 
 ### 2026-11-24 — FEAT-007 · GitHub 업로드를 위한 저장소 정리
 

@@ -85,12 +85,14 @@ jobs:
           if ($workspaceFiles.Count -eq 0) {
             throw "Build files were created in runner temp but could not be copied to $workspaceArtifactDirectory"
           }
+          Write-Host "GitHub workspace: $env:GITHUB_WORKSPACE"
+          Write-Host "Artifact directory for upload: $workspaceArtifactDirectory"
           $workspaceFiles | ForEach-Object { Write-Host ("Staged artifact file: " + $_.FullName + " (" + $_.Length + " bytes)") }
 
       - name: Upload Windows build artifact
         uses: actions/upload-artifact@v4
         with:
           name: windows-player-${{ github.sha }}
-          path: artifacts/Windows/
+          path: ${{ github.workspace }}\artifacts\Windows
           if-no-files-found: error
           retention-days: 14

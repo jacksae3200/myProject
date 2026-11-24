@@ -28,7 +28,7 @@
 - 작성일: 2026-11-25
 - 적용 환경: GitHub Actions `Windows Player Build`, self-hosted Windows x64 runner
 - 재현 여부: 재현됨. 사용자가 제공한 로그에서 업로드 단계가 `No files were found with the provided path: artifacts/Windows/`로 실패함.
-- 현재 동작: 빌드와 runner 임시 폴더 파일 확인은 통과했으나 `actions/upload-artifact@v4`가 Windows runner 임시 폴더의 절대 경로 glob에서 파일을 찾지 못해 실패했다. 업로드 작업은 GitHub workspace의 상대 경로를 사용하도록 변경한다. `punycode` 문구는 Node deprecation 경고다.
+- 현재 동작: 빌드 및 runner 임시 폴더 확인, workspace 복사 확인까지 통과한 실행에서 `actions/upload-artifact@v4`가 `artifacts/Windows/` 상대 경로에 파일이 없다고 실패했다. workspace 실제 경로와 각 파일의 절대 경로를 로그로 출력하고, 업로드 입력은 workspace 절대 경로로 지정한다. `punycode` 문구는 Node deprecation 경고다.
 - 원하는 동작: 생성된 Windows 플레이어 파일과 데이터 폴더를 workflow artifact로 업로드하고 내려받을 수 있다.
 - 재현 순서:
   1. `Windows Player Build` workflow를 실행한다.
@@ -37,11 +37,12 @@
   - [x] 빌드 출력을 `.exe` 파일인지 확인하고 실패 시 Unity 로그와 출력 폴더 항목을 남긴다.
   - [x] 빌드와 파일 확인을 같은 workflow 단계에서 연속 수행한다.
   - [x] 빌드 출력과 artifact를 runner 임시 폴더 아래 저장한다.
-  - [x] 검증한 빌드 출력을 workspace로 복사하고 상대 경로로 업로드한다.
+  - [x] 검증한 빌드 출력을 workspace로 복사한다.
+  - [x] workspace와 복사된 파일 경로를 로그에 기록하고, 절대 경로로 업로드한다.
   - [ ] Actions 재실행 후 artifact 업로드 및 다운로드를 확인한다.
 - 관련 요청 / 의존성: FEAT-009.
-- 원인 / 변경 파일: 절대 경로 `runner.temp` glob이 `upload-artifact`에서 매치되지 않았다. 검증된 빌드 파일을 workspace의 `artifacts/Windows`로 복사하고 상대 경로 glob으로 업로드한다. 생성 결과가 Git에 추가되지 않도록 `/artifacts/`를 `.gitignore`에 등록했다. `.github/workflows/windows-player-build.yml`, `.gitignore`.
-- 검증 방법 / 결과: 사용자가 제공한 최신 로그에서 runner 임시 폴더 출력 확인 뒤 upload 단계까지 진행한 것을 확인했다. workspace 복사 및 상대 경로 업로드 수정은 아직 Actions에서 실행하지 않았다.
+- 원인 / 변경 파일: runner 임시 폴더 절대 glob과 workspace 상대 디렉터리 입력 모두 action에서 파일 매치 0건으로 처리되었다. 검증된 파일을 workspace로 복사한 뒤 `${{ github.workspace }}\artifacts\Windows`를 업로드 대상으로 쓰고 경로를 로그로 대조한다. 생성 결과가 Git에 추가되지 않도록 `/artifacts/`를 `.gitignore`에 등록했다. `.github/workflows/windows-player-build.yml`, `.gitignore`.
+- 검증 방법 / 결과: 사용자가 제공한 로그에서 빌드/복사 단계를 통과하고 upload 단계에 도달한 것을 확인했다. 새 절대 경로 입력은 아직 Actions에서 실행하지 않았다.
 - 남은 사항: 수정사항을 푸시한 뒤 Actions 재실행 로그를 확인하고 artifact를 다운로드한다.
 - 완료일:
 - 구현 기록: [1번 문서 BUG-011 변경 이력](01_IMPLEMENTED.md#2026-11-25--bug-011--windows-빌드-artifact-업로드-경로-수정), FEAT-009.
