@@ -61,9 +61,9 @@
 
 ### 2026-11-25 — BUG-011 · Windows 빌드 artifact 업로드 경로 수정
 
-- 사용자가 제공한 두 번째 Actions 로그에서 `artifacts/Windows` 폴더에 파일이 없음을 확인했습니다. runner 작업 공간에서도 같은 폴더가 비어 있었습니다. 이전 `Test-Path` 검사는 파일 생성 여부를 보장하지 않아 `-PathType Leaf` 및 Unity `File.Exists` 검사를 추가했습니다.
-- Unity 빌드의 입력·출력 경로 로그, 실패 시 Editor 로그 tail과 출력 폴더 항목, 업로드 전 실제 파일 경로/크기 출력을 추가했습니다. artifact glob은 `${{ github.workspace }}/artifacts/Windows/**`로 지정했습니다.
-- 검증: runner workspace에서 출력 폴더가 빈 상태임을 확인. 수정 workflow를 재실행하여 Unity 로그, exe 생성 및 artifact를 확인해야 하므로 BUG-011은 검증 대기입니다.
+- 사용자가 Actions 로그에서 두 번째로 `artifacts/Windows`에 파일이 없다는 결과를 보고했고, runner workspace의 폴더도 비어 있었습니다. 원인이 단계 사이에서 발생하는지 특정되지 않아 빌드와 출력 확인을 같은 workflow 단계로 합쳤습니다.
+- Unity 빌드 및 artifact 출력 위치를 runner 임시 폴더 아래로 옮겼습니다. exe 파일 확인, Unity 빌드 시작 경로·출력 경로 및 실패 시 Editor 로그/폴더 항목 출력을 유지합니다.
+- 검증: 기존 runner workspace에서 산출물 폴더가 빈 상태임을 확인. 수정 workflow의 재실행 및 artifact 확인이 남아 있어 BUG-011은 검증 대기입니다.
 - 변경: `.github/workflows/windows-player-build.yml`, `Assets/CpcPrototype/Editor/WindowsPlayerBuild.cs`, `Docs/03_BUGS_AND_FIXES.md`, `Docs/02_FEATURE_REQUESTS.md`, `Docs/01_IMPLEMENTED.md`, `Docs/CI_CD.md`.
 - 다음 행동: 수정사항을 푸시한 뒤 Actions의 출력 파일 목록과 artifact를 확인합니다.
 
@@ -81,7 +81,7 @@
 - `.github/workflows/windows-player-build.yml`은 `main` 푸시 및 수동 실행에서 Git LFS 파일을 체크아웃하고, `ProjectVersion.txt`와 일치하는 Unity Editor를 self-hosted Windows x64 runner에서 찾아 빌드합니다. 성공한 플레이어 파일을 14일 보관 Actions artifact로 업로드합니다. PR 이벤트는 self-hosted runner가 외부 PR 코드를 실행하지 않도록 트리거에 넣지 않았습니다.
 - 검증: 프로젝트 버전 6000.6.10f1, 활성 빌드 씬 경로와 파일 존재, workflow의 runner/수동 트리거/artifact 업로드, 빌드 진입점의 Windows x64 타깃을 정적 확인했습니다. `git diff --check` 통과. Unity Editor 빌드와 Actions runner 실행은 아직 수행하지 않았으므로 FEAT-009는 검증 대기입니다.
 - 변경: `Assets/CpcPrototype/Editor/WindowsPlayerBuild.cs` 및 `.meta`, `.github/workflows/windows-player-build.yml`, `Docs/02_FEATURE_REQUESTS.md`, `Docs/01_IMPLEMENTED.md`, `Docs/CI_CD.md`.
-- 첫 실행은 artifact 업로드 단계, 다음 실행은 출력 폴더에 파일이 없다는 사전 검사에서 끝났습니다(BUG-011). 파일 생성 검증과 Unity 로그 출력을 강화했으며, 수정 workflow 재실행/다운로드가 남았습니다. itch.io 업로드는 이 workflow에 포함하지 않았습니다.
+- 첫 두 실행은 artifact 업로드/산출물 확인에서 출력 파일을 찾지 못해 끝났습니다(BUG-011). 빌드와 파일 확인을 같은 단계로 합치고 출력을 runner 임시 폴더로 이동했습니다. 수정 workflow 재실행/다운로드가 남았습니다. itch.io 업로드는 이 workflow에 포함하지 않았습니다.
 
 ### 2026-11-24 — FEAT-007 · GitHub 업로드를 위한 저장소 정리
 

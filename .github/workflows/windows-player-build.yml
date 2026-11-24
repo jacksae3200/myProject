@@ -49,10 +49,13 @@ jobs:
         env:
           UNITY_EDITOR_PATH_FOR_JOB: ${{ steps.unity.outputs.path }}
         run: |
-          $outputPath = Join-Path $env:GITHUB_WORKSPACE 'artifacts\Windows\Game.exe'
-          New-Item -ItemType Directory -Force -Path (Split-Path -Parent $outputPath) | Out-Null
-          $logPath = Join-Path $env:RUNNER_TEMP 'unity-windows-build.log'
+          $buildDirectoryName = "windows-player-$env:GITHUB_RUN_ID-$env:GITHUB_RUN_ATTEMPT"
+          $buildDirectory = Join-Path $env:RUNNER_TEMP $buildDirectoryName
+          $outputPath = Join-Path $buildDirectory 'Game.exe'
+          New-Item -ItemType Directory -Force -Path $buildDirectory | Out-Null
+          $logPath = Join-Path $env:RUNNER_TEMP "unity-windows-build-$env:GITHUB_RUN_ID-$env:GITHUB_RUN_ATTEMPT.log"
           $env:UNITY_BUILD_OUTPUT = $outputPath
+          Write-Host "Unity output will be written to $outputPath"
           & $env:UNITY_EDITOR_PATH_FOR_JOB -batchmode -nographics -quit -projectPath $env:GITHUB_WORKSPACE -executeMethod CpcPrototype.Editor.WindowsPlayerBuild.Build -logFile $logPath
           $unityExitCode = $LASTEXITCODE
           if ($unityExitCode -ne 0) {
@@ -61,23 +64,17 @@ jobs:
           }
           if (-not (Test-Path -LiteralPath $outputPath -PathType Leaf)) {
             if (Test-Path -LiteralPath $logPath) { Get-Content -LiteralPath $logPath -Tail 160 }
-            $artifactDirectory = Split-Path -Parent $outputPath
-            if (Test-Path -LiteralPath $artifactDirectory) {
-              Get-ChildItem -LiteralPath $artifactDirectory -Force -Recurse | ForEach-Object { Write-Host ("Output item: " + $_.FullName + " [directory=" + $_.PSIsContainer + "]") }
-            }
+            Get-ChildItem -LiteralPath $buildDirectory -Force -Recurse | ForEach-Object { Write-Host ("Output item: " + $_.FullName + " [directory=" + $_.PSIsContainer + "]") }
             throw "Unity exited successfully but did not create a player executable file: $outputPath"
           }
           $builtPlayer = Get-Item -LiteralPath $outputPath
           Write-Host "Created executable $($builtPlayer.FullName) ($($builtPlayer.Length) bytes)"
-
-      - name: Verify Windows build files
-        run: |
-          $artifactDirectory = Join-Path $env:GITHUB_WORKSPACE 'artifacts\Windows'
-          $files = @(Get-ChildItem -LiteralPath $artifactDirectory -Force -Recurse -File)
+          $files = @(Get-ChildItem -LiteralPath $buildDirectory -Force -Recurse -File)
           if ($files.Count -eq 0) {
-            $items = @(Get-ChildItem -LiteralPath $artifactDirectory -Force -Recurse -ErrorAction SilentlyContinue)
+            if (Test-Path -LiteralPath $logPath) { Get-Content -LiteralPath $logPath -Tail 160 }
+            $items = @(Get-ChildItem -LiteralPath $buildDirectory -Force -Recurse -ErrorAction SilentlyContinue)
             $items | ForEach-Object { Write-Host ("Output item: " + $_.FullName + " [directory=" + $_.PSIsContainer + "]") }
-            throw "Unity reported a successful build, but no files exist under $artifactDirectory"
+            throw "Unity reported a successful build, but no files exist under $buildDirectory"
           }
           $files | ForEach-Object { Write-Host ("Artifact file: " + $_.FullName + " (" + $_.Length + " bytes)") }
 
@@ -85,6 +82,6 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: windows-player-${{ github.sha }}
-          path: ${{ github.workspace }}/artifacts/Windows/**
+          path: ${{ runner.temp }}/windows-player-${{ github.run_id }}-${{ github.run_attempt }}/**
           if-no-files-found: error
           retention-days: 14

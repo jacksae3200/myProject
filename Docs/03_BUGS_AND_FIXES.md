@@ -28,19 +28,19 @@
 - 작성일: 2026-11-25
 - 적용 환경: GitHub Actions `Windows Player Build`, self-hosted Windows x64 runner
 - 재현 여부: 재현됨. 사용자가 제공한 로그에서 업로드 단계가 `No files were found with the provided path: artifacts/Windows/`로 실패함.
-- 현재 동작: 산출물 확인 단계에서 `artifacts/Windows` 폴더는 있으나 파일이 없어 job이 실패한다. runner workspace에서도 해당 폴더가 비어 있는 것을 확인했다. 이전 빌드 단계의 `Test-Path`는 파일인지 확인하지 않아 실제 exe 생성 검증이 부족했다. `punycode` 문구는 Node deprecation 경고다.
+- 현재 동작: 최신 실행에서도 산출물 확인 단계가 `artifacts/Windows` 폴더에서 파일을 찾지 못해 실패했다. runner workspace에서도 해당 폴더가 비어 있었다. 이전 빌드 단계가 통과했는데 후속 단계에서 파일이 사라지거나 경로가 달라지는 원인은 아직 특정하지 못했다. `punycode` 문구는 Node deprecation 경고다.
 - 원하는 동작: 생성된 Windows 플레이어 파일과 데이터 폴더를 workflow artifact로 업로드하고 내려받을 수 있다.
 - 재현 순서:
   1. `Windows Player Build` workflow를 실행한다.
   2. `Upload Windows build artifact` 단계의 경로 검색 결과를 확인한다.
 - 완료 기준:
 - [x] 빌드 출력을 `.exe` 파일인지 확인하고 실패 시 Unity 로그와 출력 폴더 항목을 남긴다.
-- [x] 업로드 전에 빌드 출력 폴더의 실제 파일 목록과 크기를 로그에 남긴다.
-- [x] 업로드 입력을 runner workspace 절대 경로의 하위 파일 glob으로 지정한다.
+  - [x] 빌드와 파일 확인을 같은 workflow 단계에서 연속 수행한다.
+  - [x] 빌드 출력과 artifact를 runner 임시 폴더 아래 저장한다.
   - [ ] Actions 재실행 후 artifact 업로드 및 다운로드를 확인한다.
 - 관련 요청 / 의존성: FEAT-009.
-- 원인 / 변경 파일: 이전 빌드 단계가 `Test-Path`로 경로만 확인해 파일인지 확인하지 않았다. 이를 `-PathType Leaf`와 `File.Exists`로 강화하고, Unity 빌드 시작 경로·출력 경로 및 실패 시 Editor 로그/출력 디렉터리 항목을 확인하게 했다. 업로드 glob은 `${{ github.workspace }}/artifacts/Windows/**`다. `.github/workflows/windows-player-build.yml`, `Assets/CpcPrototype/Editor/WindowsPlayerBuild.cs`.
-- 검증 방법 / 결과: runner workspace에서 `artifacts/Windows`가 비어 있음을 확인. 수정 파일의 정적 검사 및 재실행이 남아 있다.
+- 원인 / 변경 파일: 이전 방식에서 후속 단계가 빌드 폴더를 비워진 상태로 확인했으나 단계 사이에서 달라지는 정확한 원인은 아직 확정되지 않았다. 빌드와 출력 확인을 한 단계로 합치고, Unity 빌드 및 artifact를 runner 임시 폴더 아래에 두도록 바꿨다. exe는 Unity와 PowerShell에서 각각 확인하고, 실패 시 Unity 로그와 출력 항목을 표시한다. `.github/workflows/windows-player-build.yml`, `Assets/CpcPrototype/Editor/WindowsPlayerBuild.cs`.
+- 검증 방법 / 결과: runner workspace에서 이전 산출물 폴더가 비어 있음을 확인. 수정 workflow의 실제 실행 및 artifact 확인은 남아 있다.
 - 남은 사항: 수정사항을 푸시한 뒤 Actions 재실행 로그를 확인하고 artifact를 다운로드한다.
 - 완료일:
 - 구현 기록: [1번 문서 BUG-011 변경 이력](01_IMPLEMENTED.md#2026-11-25--bug-011--windows-빌드-artifact-업로드-경로-수정), FEAT-009.
