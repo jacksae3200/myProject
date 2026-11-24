@@ -37,7 +37,7 @@
 - 의존성 / 위험: 이후 게임플레이 규칙은 순수 입력/출력 API를 정의하며 작은 단위로 분리한다. 씬·물리·시간·입력 동작은 Unity 어댑터에 남긴다.
 - 변경 파일: `Assets/CpcPrototype/Core/BehaviorTree.cs`(기존 GUID 유지), `CpcPrototype.Core.asmdef`, `Assets/CpcPrototype/Tests/EditMode` 테스트/asmdef, `.github/workflows/unity-tests.yml`, `Docs/CI_CD.md`, `Docs/01_IMPLEMENTED.md`.
 - 검증 결과: 기존 `CubeMonsterBrain` 사용 네임스페이스가 유지되고 Core 어셈블리에 Unity 참조가 없음을 확인. Unity 6000.6.10f1에서 Core 및 최초 테스트 어셈블리 컴파일을 확인했고 최종 NUnit 테스트 13개가 별도 실행에서 통과했으나 Unity Test Runner XML은 생성되지 않음.
-- 남은 사항: 이미지 태그 `-3`를 찾지 못해 첫 workflow가 테스트 시작 전에 실패했다. 이미지 버전을 `3.2.2`로 고정했으므로 이 변경을 푸시해 다시 실행하고 Unity Test Runner 결과를 확보한다. 새 태그도 없다면 Unity 6000.6.10f1 이미지 지원 여부를 확인해 CI용 대안을 정한다. CI 통과 후 빌드 및 배포 대상을 정해 다음 workflow를 구성한다.
+- 남은 사항: 이미지 태그 `-3`를 찾지 못해 workflow가 테스트 시작 전에 실패했다. `3.2.2`를 지정한 재시도에서는 CLI가 태그를 `NaN`으로 만들어 실패했으므로 버전 입력을 `3`으로 복원했다. GameCI에 Unity 6000.6.10f1 Linux IL2CPP 이미지가 게시됐는지 확인하고, 없으면 지원 버전으로 CI를 맞추거나 자체 runner/image를 구성한 뒤 Unity Test Runner 결과를 확보한다. CI 통과 후 빌드 및 배포 대상을 정해 다음 workflow를 구성한다.
 
 FEAT-004는 검증 대기 중입니다. FEAT-002와 FEAT-003은 아래 완료한 요청에 기록했습니다.
 

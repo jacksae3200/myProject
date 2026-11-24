@@ -38,7 +38,7 @@ jobs:
         with:
           projectPath: .
           unityVersion: 6000.6.10f1
-          containerRegistryImageVersion: 3.2.2
+          containerRegistryImageVersion: 3
           testMode: EditMode
           githubToken: ${{ secrets.GITHUB_TOKEN }}
 

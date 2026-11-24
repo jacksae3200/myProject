@@ -24,7 +24,7 @@
 
 ## NUnit CI 첫 workflow
 
-`.github/workflows/unity-tests.yml`은 `main`에 푸시하거나 `main` 대상 PR을 열 때 Unity 6000.6.10f1의 Edit Mode 테스트를 실행합니다. GameCI Docker 이미지 버전은 `3.2.2`로 고정했습니다. Git LFS 파일 체크아웃과 Unity `Library` 캐시를 사용하고, 테스트 결과를 Actions 아티팩트로 업로드합니다. `workflow_dispatch`로 GitHub Actions 화면에서 수동 실행도 할 수 있습니다.
+`.github/workflows/unity-tests.yml`은 `main`에 푸시하거나 `main` 대상 PR을 열 때 Unity 6000.6.10f1의 Edit Mode 테스트를 실행합니다. GameCI Docker 이미지 버전은 기본 세대 버전인 `3`을 사용합니다. Git LFS 파일 체크아웃과 Unity `Library` 캐시를 사용하고, 테스트 결과를 Actions 아티팩트로 업로드합니다. `workflow_dispatch`로 GitHub Actions 화면에서 수동 실행도 할 수 있습니다.
 
 저장소의 **Settings → Secrets and variables → Actions → New repository secret**에 다음 세 값이 등록되어 있어야 합니다.
 
@@ -32,7 +32,7 @@
 - `UNITY_EMAIL`: Unity ID의 이메일
 - `UNITY_PASSWORD`: Google 비밀번호가 아닌 Unity ID용 비밀번호
 
-GitHub Actions의 **Actions → Unity Edit Mode Tests → Run workflow**에서 수동 실행할 수 있습니다. 실행이 끝나면 job 결과와 `unity-editmode-test-results` 아티팩트를 확인합니다. Docker 이미지 `manifest unknown`/`not found` 오류는 NUnit 실패가 아니라 해당 Unity 버전·플랫폼 이미지 태그를 찾지 못한 것이므로, GameCI 이미지 배포 여부를 확인해야 합니다. 테스트 결과가 통과해도 빌드·씬 플레이 및 실제 게임 통합 검증까지 통과했다는 뜻은 아닙니다.
+GitHub Actions의 **Actions → Unity Edit Mode Tests → Run workflow**에서 수동 실행할 수 있습니다. 실행이 끝나면 job 결과와 `unity-editmode-test-results` 아티팩트를 확인합니다. Docker 이미지 `manifest unknown`/`not found` 오류는 NUnit 실패가 아니라 해당 Unity 버전·플랫폼 이미지 태그를 찾지 못한 것이므로, GameCI 이미지 배포 여부를 확인해야 합니다. `containerRegistryImageVersion`에 `3.2.2`처럼 세부 버전을 넣으면 현재 CLI에서 `NaN` 태그가 만들어질 수 있으므로 `3`을 사용합니다. 테스트 결과가 통과해도 빌드·씬 플레이 및 실제 게임 통합 검증까지 통과했다는 뜻은 아닙니다.
 
 ## 이번 변경에서 아직 하지 않은 것
 
