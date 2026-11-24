@@ -38,7 +38,8 @@
 - 의존성 / 위험: 이후 게임플레이 규칙은 순수 입력/출력 API를 정의하며 작은 단위로 분리한다. 씬·물리·시간·입력 동작은 Unity 어댑터에 남긴다.
 - 변경 파일: `Assets/CpcPrototype/Core/BehaviorTree.cs`(기존 GUID 유지), `CpcPrototype.Core.asmdef`, `Assets/CpcPrototype/Tests/EditMode` 테스트/asmdef, `Tests/CoreNUnit/CpcPrototype.Core.Tests.csproj`, `.github/workflows/core-nunit-tests.yml`, `.github/workflows/unity-tests.yml`, `Docs/CI_CD.md`, `Docs/01_IMPLEMENTED.md`.
 - 검증 결과: 기존 `CubeMonsterBrain` 사용 네임스페이스가 유지되고 Core 어셈블리에 Unity 참조가 없음을 확인. Unity 6000.6.10f1에서 Core 및 최초 테스트 어셈블리 컴파일을 확인했고 최종 NUnit 테스트 13개가 별도 실행에서 통과했으나 Unity Test Runner XML은 생성되지 않음.
-- 남은 사항: Unity Edit Mode Test Runner는 GameCI가 Unity 6000.6.10f1 Linux IL2CPP 이미지를 찾지 못해 실행 대기다. 반복 실행해도 같은 오류가 났으며, `3.2.2` 입력은 `NaN` 태그를 만들었다. 별도의 순수 Core NUnit CI를 추가했으며 GitHub Actions에서 실행 결과를 확인해야 한다. 추후 Unity 이미지가 제공되거나 자체 runner/image를 준비하면 Edit Mode workflow를 재개한다. CI 통과 후 빌드 및 배포 대상을 정해 다음 workflow를 구성한다.
+- 검증 결과: 사용자가 GitHub Actions에서 Core NUnit workflow 통과를 확인했다. Unity Edit Mode workflow는 실패했으며, 앞선 로그에서는 테스트 시작 전 GameCI Docker 이미지 태그 `ubuntu-6000.6.10f1-linux-il2cpp-3`를 찾지 못했다. 현재 실패가 같은 원인인지 새 로그로 확인한다.
+- 남은 사항: 순수 Core 규칙은 엔진 독립 NUnit CI 통과. Unity Editor 기반 Edit Mode/프로젝트 통합 검증은 GameCI 이미지가 제공되거나 자체 runner/image를 준비한 뒤 수행한다. CI/빌드가 안정화되면 배포 대상을 정해 다음 workflow를 구성한다.
 
 FEAT-004는 검증 대기 중입니다. FEAT-002와 FEAT-003은 아래 완료한 요청에 기록했습니다.
 

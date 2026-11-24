@@ -24,7 +24,7 @@
 
 ## 엔진 독립 NUnit CI
 
-`.github/workflows/core-nunit-tests.yml`은 `main` 푸시, `main` 대상 PR, 수동 실행에서 순수 Core 테스트를 `.NET 10`의 `dotnet test`로 실행합니다. 기존 `BehaviorTreeTests`와 `AmmoInventoryTests` 소스 파일을 직접 연결하므로 테스트 로직을 복사하지 않습니다. 이 job은 Unity Editor, GameCI Docker 이미지, Unity 라이선스 Secret 없이 실행됩니다. NUnit 결과 TRX를 `core-nunit-test-results` 아티팩트로 올립니다.
+`.github/workflows/core-nunit-tests.yml`은 `main` 푸시, `main` 대상 PR, 수동 실행에서 순수 Core 테스트를 `.NET 10`의 `dotnet test`로 실행합니다. 기존 `BehaviorTreeTests`와 `AmmoInventoryTests` 소스 파일을 직접 연결하므로 테스트 로직을 복사하지 않습니다. 이 job은 Unity Editor, GameCI Docker 이미지, Unity 라이선스 Secret 없이 실행됩니다. NUnit 결과 TRX를 `core-nunit-test-results` 아티팩트로 올립니다. GitHub Actions Core NUnit 실행은 통과했다고 사용자가 확인했습니다.
 
 이 검사는 엔진 독립 Core 규칙만 컴파일하고 테스트합니다. `MonoBehaviour`, 씬, 물리, UI 연결이나 전체 Unity 프로젝트 컴파일을 검증하지는 않습니다.
 

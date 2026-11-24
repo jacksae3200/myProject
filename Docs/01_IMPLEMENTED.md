@@ -76,7 +76,7 @@
 
 - `BehaviorTree.cs`를 Unity 참조를 금지하는 `CpcPrototype.Core` 어셈블리로 이동하고, 순수 C# 동작 검증을 위한 NUnit Edit Mode 테스트 6개를 추가했습니다. 기존 `.meta` GUID를 유지했습니다.
 - `.github/workflows/core-nunit-tests.yml`을 추가해 기존 Core NUnit 테스트 소스를 .NET 10에서 실행하고 TRX 결과를 보관합니다. Unity Edit Mode workflow는 GameCI 이미지가 준비되지 않아 수동 실행으로 제한했습니다. 별도 서버/백엔드 분리가 아니라 Unity 내부 Core와 엔진 어댑터 경계를 시작한 상태입니다.
-- 정적 검토: 기존 `CubeMonsterBrain` 참조는 유지되며 Core asmdef에 Unity 참조가 없습니다. 프로젝트 버전 6000.6.10f1에서 Core와 테스트 어셈블리 컴파일을 확인했습니다. GameCI는 `unityci/editor:ubuntu-6000.6.10f1-linux-il2cpp-3` 이미지를 찾지 못해 컨테이너가 시작되지 않았습니다. Unity 독립 NUnit workflow는 추가했으나 Actions 실행 결과는 없어 FEAT-006은 검증 대기입니다.
+- 검증 결과: 사용자가 GitHub Actions에서 Core NUnit workflow 통과를 확인했습니다. GameCI Unity Edit Mode workflow는 실패했습니다. 앞선 실행 로그에서는 `unityci/editor:ubuntu-6000.6.10f1-linux-il2cpp-3` 이미지를 찾지 못해 테스트 시작 전에 종료됐습니다. 이번 실패가 같은 원인인지 최신 로그 확인이 필요합니다. FEAT-006은 Unity 기반 검증이 남아 검증 대기입니다.
 
 ### 2026-11-17 — BUG-010 · 그래플 방향과 최대 후킹 거리
 
