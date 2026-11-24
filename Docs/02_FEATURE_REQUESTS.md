@@ -31,12 +31,13 @@
   - [x] UnityEngine 참조 없는 Core 어셈블리를 구성하고 행동 트리를 이동한다.
   - [x] Selector, Sequence 및 각 leaf 노드의 NUnit 테스트 코드를 추가한다.
   - [ ] Unity 에디터 검사 여부를 확인하고 미실행 시 검증 대기로 남긴다.
-  - [ ] CI/CD 단계와 필요한 GitHub 설정을 문서화한다.
+  - [x] NUnit Edit Mode 테스트를 GitHub Actions에서 실행하고 결과 아티팩트를 보관하는 workflow를 추가한다.
+  - [x] CI/CD 단계와 필요한 GitHub 설정을 문서화한다.
 - 검증 방법: Unity Test Framework Edit Mode 실행, 어셈블리 참조 및 workflow/가이드 정적 확인.
 - 의존성 / 위험: 이후 게임플레이 규칙은 순수 입력/출력 API를 정의하며 작은 단위로 분리한다. 씬·물리·시간·입력 동작은 Unity 어댑터에 남긴다.
-- 변경 파일: `Assets/CpcPrototype/Core/BehaviorTree.cs`(기존 GUID 유지), `CpcPrototype.Core.asmdef`, `Assets/CpcPrototype/Tests/EditMode` 테스트/asmdef, `Docs/CI_CD.md`, `Docs/01_IMPLEMENTED.md`.
+- 변경 파일: `Assets/CpcPrototype/Core/BehaviorTree.cs`(기존 GUID 유지), `CpcPrototype.Core.asmdef`, `Assets/CpcPrototype/Tests/EditMode` 테스트/asmdef, `.github/workflows/unity-tests.yml`, `Docs/CI_CD.md`, `Docs/01_IMPLEMENTED.md`.
 - 검증 결과: 기존 `CubeMonsterBrain` 사용 네임스페이스가 유지되고 Core 어셈블리에 Unity 참조가 없음을 확인. Unity 6000.6.10f1에서 Core 및 최초 테스트 어셈블리 컴파일을 확인했고 최종 NUnit 테스트 13개가 별도 실행에서 통과했으나 Unity Test Runner XML은 생성되지 않음.
-- 남은 사항: Unity Test Runner 결과를 다시 확보한다. GitHub Actions workflow는 저장소 원격, 라이선스, 빌드/배포 대상 확인 후 추가.
+- 남은 사항: 이미지 태그 `-3`를 찾지 못해 첫 workflow가 테스트 시작 전에 실패했다. 이미지 버전을 `3.2.2`로 고정했으므로 이 변경을 푸시해 다시 실행하고 Unity Test Runner 결과를 확보한다. 새 태그도 없다면 Unity 6000.6.10f1 이미지 지원 여부를 확인해 CI용 대안을 정한다. CI 통과 후 빌드 및 배포 대상을 정해 다음 workflow를 구성한다.
 
 FEAT-004는 검증 대기 중입니다. FEAT-002와 FEAT-003은 아래 완료한 요청에 기록했습니다.
 

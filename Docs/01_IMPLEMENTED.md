@@ -76,7 +76,7 @@
 
 - `BehaviorTree.cs`를 Unity 참조를 금지하는 `CpcPrototype.Core` 어셈블리로 이동하고, 순수 C# 동작 검증을 위한 NUnit Edit Mode 테스트 6개를 추가했습니다. 기존 `.meta` GUID를 유지했습니다.
 - `.github/workflows/unity-tests.yml`을 추가해 main 푸시/PR에서 Unity 6000.6.10f1 Edit Mode NUnit 테스트를 실행하고, LFS 에셋 체크아웃·Library 캐시·결과 아티팩트 업로드를 구성했습니다. GitHub Actions 수동 실행도 지원합니다. 권장 규칙 분리 순서와 CI→빌드→승인 배포 단계를 [CI/CD 가이드](CI_CD.md)에 기록했습니다. 별도 서버/백엔드 분리를 완료한 것이 아니라 Unity 내부 Core와 엔진 어댑터 경계를 시작한 상태입니다.
-- 정적 검토: 기존 `CubeMonsterBrain` 참조는 유지되며 Core asmdef에 Unity 참조가 없습니다. 프로젝트 버전 6000.6.10f1에서 Core와 테스트 어셈블리 컴파일을 확인했습니다. workflow YAML은 구성했으나 GitHub Actions 실제 실행 결과는 아직 없으므로 FEAT-006은 검증 대기입니다.
+- 정적 검토: 기존 `CubeMonsterBrain` 참조는 유지되며 Core asmdef에 Unity 참조가 없습니다. 프로젝트 버전 6000.6.10f1에서 Core와 테스트 어셈블리 컴파일을 확인했습니다. 첫 Actions 실행은 `unityci/editor:ubuntu-6000.6.10f1-linux-il2cpp-3` 이미지를 찾지 못해 테스트 시작 전에 실패했습니다. Docker 이미지 버전을 `3.2.2`로 고정했으며 재실행 결과는 아직 없습니다. FEAT-006은 검증 대기입니다.
 
 ### 2026-11-17 — BUG-010 · 그래플 방향과 최대 후킹 거리
 
