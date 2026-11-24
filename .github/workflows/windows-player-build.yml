@@ -59,17 +59,24 @@ jobs:
             if (Test-Path -LiteralPath $logPath) { Get-Content -LiteralPath $logPath -Tail 160 }
             exit $unityExitCode
           }
-          if (-not (Test-Path -LiteralPath $outputPath)) {
+          if (-not (Test-Path -LiteralPath $outputPath -PathType Leaf)) {
             if (Test-Path -LiteralPath $logPath) { Get-Content -LiteralPath $logPath -Tail 160 }
-            throw "Unity exited successfully but the player executable was not created: $outputPath"
+            $artifactDirectory = Split-Path -Parent $outputPath
+            if (Test-Path -LiteralPath $artifactDirectory) {
+              Get-ChildItem -LiteralPath $artifactDirectory -Force -Recurse | ForEach-Object { Write-Host ("Output item: " + $_.FullName + " [directory=" + $_.PSIsContainer + "]") }
+            }
+            throw "Unity exited successfully but did not create a player executable file: $outputPath"
           }
-          Write-Host "Created $outputPath"
+          $builtPlayer = Get-Item -LiteralPath $outputPath
+          Write-Host "Created executable $($builtPlayer.FullName) ($($builtPlayer.Length) bytes)"
 
       - name: Verify Windows build files
         run: |
           $artifactDirectory = Join-Path $env:GITHUB_WORKSPACE 'artifacts\Windows'
           $files = @(Get-ChildItem -LiteralPath $artifactDirectory -Force -Recurse -File)
           if ($files.Count -eq 0) {
+            $items = @(Get-ChildItem -LiteralPath $artifactDirectory -Force -Recurse -ErrorAction SilentlyContinue)
+            $items | ForEach-Object { Write-Host ("Output item: " + $_.FullName + " [directory=" + $_.PSIsContainer + "]") }
             throw "Unity reported a successful build, but no files exist under $artifactDirectory"
           }
           $files | ForEach-Object { Write-Host ("Artifact file: " + $_.FullName + " (" + $_.Length + " bytes)") }

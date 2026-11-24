@@ -33,8 +33,8 @@
   - [ ] Windows 플레이어 파일을 Actions artifact로 업로드하고 내려받아 확인한다.
 - 관련 요청 / 의존성: FEAT-008, FEAT-006. Runner에 ProjectVersion.txt와 일치하는 Unity Editor 및 Windows Build Support가 설치·활성화되어야 한다.
 - 구현 메모 / 변경 파일: `Assets/CpcPrototype/Editor/WindowsPlayerBuild.cs`, `.github/workflows/windows-player-build.yml`, `Docs/CI_CD.md`.
-- 검증 방법 / 결과: 사용자가 Actions 로그에서 `upload-artifact` 단계의 `No files were found with the provided path: artifacts/Windows/` 실패를 보고했다. punycode 문구는 Node 경고다. 업로드 경로를 파일 glob으로 바꾸고 업로드 전 산출물 목록 확인을 추가했다. 수정 workflow는 재실행 전이다.
-- 남은 사항 / 보류 이유: 수정사항을 푸시한 뒤 Actions를 다시 실행해 artifact를 내려받아 확인해야 한다.
+- 검증 방법 / 결과: 사용자가 Actions 로그에서 `artifacts/Windows`에 파일이 없다는 실패를 보고했다. runner 작업 디렉터리를 확인했으며 `artifacts/Windows`는 비어 있었다. 이전 `Test-Path`는 파일 형태를 보장하지 않아 `-PathType Leaf`와 Unity 측 `File.Exists` 검사 및 로그 출력을 추가했다. 수정 workflow는 재실행 전이다.
+- 남은 사항 / 보류 이유: 수정사항을 푸시한 뒤 Actions를 다시 실행해 Unity 빌드 로그와 artifact를 확인해야 한다.
 - 완료일:
 - 구현 기록: [1번 문서 FEAT-009 변경 이력](01_IMPLEMENTED.md#2026-11-25--feat-009--github-actions-windows-x64-플레이어-빌드), SYS-021.
 

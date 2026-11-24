@@ -46,7 +46,7 @@ Unity Secrets `UNITY_LICENSE`, `UNITY_EMAIL`, `UNITY_PASSWORD`는 GameCI workflo
 
 ## Windows x64 빌드 workflow
 
-`.github/workflows/windows-player-build.yml`은 `main` 푸시와 수동 실행에서 `[self-hosted, windows, x64]` runner를 사용합니다. `Assets/CpcPrototype/Editor/WindowsPlayerBuild.cs`가 Build Settings에 활성화된 씬을 Windows x64 플레이어로 빌드하고, 결과는 `windows-player-<커밋 SHA>` 이름의 Actions artifact로 14일간 보관됩니다. 업로드 전 `artifacts/Windows`의 실제 파일 경로와 크기를 로그로 확인하고 `${{ github.workspace }}/artifacts/Windows/**` 패턴으로 올립니다. 이 단계는 빌드 파일을 만들 뿐 itch.io로 배포하거나 `main`에 자동 병합하지 않습니다.
+`.github/workflows/windows-player-build.yml`은 `main` 푸시와 수동 실행에서 `[self-hosted, windows, x64]` runner를 사용합니다. `Assets/CpcPrototype/Editor/WindowsPlayerBuild.cs`가 Build Settings에 활성화된 씬을 Windows x64 플레이어로 빌드하고, 결과는 `windows-player-<커밋 SHA>` 이름의 Actions artifact로 14일간 보관됩니다. 빌드 후 `.exe`가 실제 파일인지 검사하고, 실패 시 Unity Editor 로그와 출력 폴더를 표시합니다. 업로드 전 `artifacts/Windows`의 실제 파일 경로와 크기를 로그로 확인하고 `${{ github.workspace }}/artifacts/Windows/**` 패턴으로 올립니다. 이 단계는 빌드 파일을 만들 뿐 itch.io로 배포하거나 `main`에 자동 병합하지 않습니다.
 
 Runner 준비 조건:
 
@@ -62,7 +62,7 @@ Runner 준비 조건:
 3. 성공한 실행을 열고 **Artifacts**에서 `windows-player-<커밋 SHA>`를 내려받습니다. 압축 파일을 풀면 `.exe`와 `_Data` 폴더 등 플레이어 파일이 있습니다.
 4. Windows에서 압축을 푼 폴더의 실행 파일을 실행해 시작 씬과 기본 플레이를 확인합니다.
 
-이 workflow는 self-hosted runner에서 신뢰할 수 있는 저장소 브랜치만 실행하도록 push-to-main과 수동 실행만 받습니다. GitHub에 아직 커밋/푸시되지 않은 변경은 Actions에서 실행할 수 없습니다. 첫 실행에서 artifact 경로 누락이 보고되어 BUG-011에서 glob 패턴과 업로드 전 파일 목록 확인을 추가했습니다. 수정 workflow의 재실행 후 결과가 확인될 때까지 FEAT-009는 검증 대기입니다.
+이 workflow는 self-hosted runner에서 신뢰할 수 있는 저장소 브랜치만 실행하도록 push-to-main과 수동 실행만 받습니다. GitHub에 아직 커밋/푸시되지 않은 변경은 Actions에서 실행할 수 없습니다. 앞선 실행에서 출력 폴더가 비어 있어 BUG-011에서 exe 타입 검사와 Unity 로그 출력을 강화했습니다. 재실행 결과가 확인될 때까지 FEAT-009는 검증 대기입니다.
 ## 이번 변경에서 아직 하지 않은 것
 
 - Butler 기반 itch.io 배포 workflow는 아직 추가하지 않았습니다. Windows 빌드 artifact를 먼저 확인한 뒤 별도 단계로 구성합니다.

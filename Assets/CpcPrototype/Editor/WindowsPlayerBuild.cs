@@ -61,6 +61,7 @@ namespace CpcPrototype.Editor
                 options = BuildOptions.None
             };
 
+            Debug.Log($"Starting Windows player build. Output: {fullOutputPath}; enabled scenes: {scenes.Length}.");
             BuildReport report = BuildPipeline.BuildPlayer(options);
             if (report.summary.result != BuildResult.Succeeded)
             {
@@ -77,7 +78,9 @@ namespace CpcPrototype.Editor
 
             if (!File.Exists(fullOutputPath))
             {
-                throw new FileNotFoundException("BuildPipeline reported success but did not create the player executable.", fullOutputPath);
+                throw new FileNotFoundException(
+                    "BuildPipeline reported success but did not create the player executable.",
+                    fullOutputPath);
             }
         }
     }
