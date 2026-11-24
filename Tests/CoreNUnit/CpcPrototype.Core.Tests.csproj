@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <Nullable>disable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.12.0" />
+    <PackageReference Include="NUnit" Version="3.14.0" />
+    <PackageReference Include="NUnit3TestAdapter" Version="6.3.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="../../Assets/CpcPrototype/Core/BehaviorTree.cs" Link="Core/BehaviorTree.cs" />
+    <Compile Include="../../Assets/CpcPrototype/Core/AmmoInventory.cs" Link="Core/AmmoInventory.cs" />
+    <Compile Include="../../Assets/CpcPrototype/Tests/EditMode/BehaviorTreeTests.cs" Link="Tests/BehaviorTreeTests.cs" />
+    <Compile Include="../../Assets/CpcPrototype/Tests/EditMode/AmmoInventoryTests.cs" Link="Tests/AmmoInventoryTests.cs" />
+  </ItemGroup>
+</Project>

@@ -8,6 +8,7 @@
 [Mm]emoryCaptures/
 .vs/
 *.csproj
+!Tests/CoreNUnit/CpcPrototype.Core.Tests.csproj
 *.sln
 *.slnx
 *.user
@@ -23,3 +24,6 @@ Assets/VikingTexturePreview/
 CpcCleanVideos/
 CpcTacticalVideos/
 CpcComparisonVideos/
+
+# Standalone .NET test output
+TestResults/

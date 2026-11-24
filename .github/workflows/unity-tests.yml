@@ -1,10 +1,6 @@
-name: Unity Edit Mode Tests
+name: Unity Edit Mode Tests (GameCI)
 
 on:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
   workflow_dispatch:
 
 permissions:

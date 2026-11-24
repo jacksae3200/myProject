@@ -1,0 +1,39 @@
+name: Core NUnit Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  core-nunit-tests:
+    name: Engine-independent Core Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Run NUnit Core tests
+        run: >-
+          dotnet test Tests/CoreNUnit/CpcPrototype.Core.Tests.csproj
+          --configuration Release
+          --logger "trx;LogFileName=core-nunit-tests.trx"
+          --results-directory TestResults
+
+      - name: Upload NUnit test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: core-nunit-test-results
+          path: TestResults/*.trx
+          if-no-files-found: warn

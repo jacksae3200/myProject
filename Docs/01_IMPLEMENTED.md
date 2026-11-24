@@ -40,7 +40,7 @@
 | SYS-014 | 가로등 그래플 | 전구 6개 타깃·초록색 링·줄 발사, 플레이어와 전구를 잇는 수직 평면 안에서 스윙해 반대편의 초기 거리 절반 지점에 도착, Inspector 최대 거리 설정, 장애물 검사·취소 | FEAT-002, BUG-010. [가이드 및 검증](../Tools/GrappleSniper/README.md), PlayerGrappleAction.cs, GrappleAnchor.cs. 가상 입력·궤적·충돌·스나이퍼 연계 확인 |
 | SYS-015 | 그래플 후 스나이퍼 | Assets/sniper의 AWM 프리팹·등/손 소켓 교체·그래플 도착 후 1인칭·5초 슬로모션·화면 픽셀 수치 2배/복구·부드러운 1인칭/3인칭·오른쪽 아래 비조준 배치·RMB 시 스코프가 중앙으로 이동·LMB 사격·반동·기존 탄환과 효과 공유·거리 독립 최대 2배 픽셀 해상도 | FEAT-003, BUG-004. [가이드 및 검증](../Tools/GrappleSniper/README.md), GrappleSniperAction.cs. 비조준/조준 전환 및 사격·복귀 플레이 확인 |
 | SYS-016 | Downtown 직선 도시 환경 | Downtown City 도로·보도 4타일, 양쪽 건물 6채씩, 3인칭 카메라 쪽 건물 렌더 컬링 및 1인칭/스코프에서 해제. 기존 그래플 전구·맵 바닥·게임플레이 유지 | FIX-003. [설정 및 검증](../Tools/Fix003/README.md), StreetBuildingCulling.cs, DowntownStreetSetup.cs. 플레이·회귀·재로드 검증 통과 |
-| SYS-017 | Unity 독립 Core 첫 분리 | `CpcPrototype.Core` asmdef에서 Unity 참조 없이 행동 트리 실행. NUnit Edit Mode 테스트 추가, 실행 결과는 FEAT-006 검증 대기 | [Core](../Assets/CpcPrototype/Core), [테스트](../Assets/CpcPrototype/Tests/EditMode), [CI/CD 가이드](CI_CD.md). Unity 엔진 테스트 미실행 |
+| SYS-017 | Unity 독립 Core 첫 분리 | `CpcPrototype.Core` asmdef에서 Unity 참조 없이 행동 트리 실행. NUnit 테스트는 Unity Edit Mode와 별도 .NET CI 실행 경로를 구성, Actions 결과는 FEAT-006 검증 대기 | [Core](../Assets/CpcPrototype/Core), [테스트](../Assets/CpcPrototype/Tests/EditMode), [CI/CD 가이드](CI_CD.md). Unity Editor 기반 테스트 미실행 |
 | SYS-018 | 탄약 규칙과 플레이어 연동 | 발사·재장전·잔탄 규칙을 순수 `AmmoInventory` Core로 분리하고 R키, 빈 탄창 자동 재장전, 탄약 HUD/소진 경고를 SurvivalPlayer에 연결 | FEAT-004. [AmmoInventory](../Assets/CpcPrototype/Core/AmmoInventory.cs), [SurvivalPlayer](../Assets/CpcPrototype/Survival/SurvivalPlayer.cs), [전투 안내](../Assets/CpcPrototype/Survival/CombatFeatures.md). NUnit 테스트 13개 통과(로컬 NUnit 실행), Unity 통합 플레이 미실행 |
 | SYS-019 | GitHub 업로드 정리 | 로컬 녹화·생성 프리뷰를 Git에서 제외하고 필수 100 MiB 초과 텍스처 3개를 Git LFS로 관리 | FEAT-007. 저장소 준비 과정이며 앱 실행 및 원격 푸시는 별도 |
 
@@ -75,8 +75,8 @@
 ### 2026-11-24 — FEAT-006 · Unity 독립 Core와 CI/CD 기반
 
 - `BehaviorTree.cs`를 Unity 참조를 금지하는 `CpcPrototype.Core` 어셈블리로 이동하고, 순수 C# 동작 검증을 위한 NUnit Edit Mode 테스트 6개를 추가했습니다. 기존 `.meta` GUID를 유지했습니다.
-- `.github/workflows/unity-tests.yml`을 추가해 main 푸시/PR에서 Unity 6000.6.10f1 Edit Mode NUnit 테스트를 실행하고, LFS 에셋 체크아웃·Library 캐시·결과 아티팩트 업로드를 구성했습니다. GitHub Actions 수동 실행도 지원합니다. 권장 규칙 분리 순서와 CI→빌드→승인 배포 단계를 [CI/CD 가이드](CI_CD.md)에 기록했습니다. 별도 서버/백엔드 분리를 완료한 것이 아니라 Unity 내부 Core와 엔진 어댑터 경계를 시작한 상태입니다.
-- 정적 검토: 기존 `CubeMonsterBrain` 참조는 유지되며 Core asmdef에 Unity 참조가 없습니다. 프로젝트 버전 6000.6.10f1에서 Core와 테스트 어셈블리 컴파일을 확인했습니다. Actions 실행에서 `unityci/editor:ubuntu-6000.6.10f1-linux-il2cpp-3` 이미지를 찾지 못해 테스트가 시작되지 않았습니다. 이미지 버전 `3.2.2` 시도는 CLI가 `NaN` 태그를 만들어 실패했으므로 `3`으로 되돌렸습니다. 정확한 이미지 태그의 배포 여부를 확인하고 재실행해야 하며 FEAT-006은 검증 대기입니다.
+- `.github/workflows/core-nunit-tests.yml`을 추가해 기존 Core NUnit 테스트 소스를 .NET 10에서 실행하고 TRX 결과를 보관합니다. Unity Edit Mode workflow는 GameCI 이미지가 준비되지 않아 수동 실행으로 제한했습니다. 별도 서버/백엔드 분리가 아니라 Unity 내부 Core와 엔진 어댑터 경계를 시작한 상태입니다.
+- 정적 검토: 기존 `CubeMonsterBrain` 참조는 유지되며 Core asmdef에 Unity 참조가 없습니다. 프로젝트 버전 6000.6.10f1에서 Core와 테스트 어셈블리 컴파일을 확인했습니다. GameCI는 `unityci/editor:ubuntu-6000.6.10f1-linux-il2cpp-3` 이미지를 찾지 못해 컨테이너가 시작되지 않았습니다. Unity 독립 NUnit workflow는 추가했으나 Actions 실행 결과는 없어 FEAT-006은 검증 대기입니다.
 
 ### 2026-11-17 — BUG-010 · 그래플 방향과 최대 후킹 거리
 
