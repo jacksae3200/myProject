@@ -78,10 +78,19 @@ jobs:
           }
           $files | ForEach-Object { Write-Host ("Artifact file: " + $_.FullName + " (" + $_.Length + " bytes)") }
 
+          $workspaceArtifactDirectory = Join-Path $env:GITHUB_WORKSPACE 'artifacts\Windows'
+          New-Item -ItemType Directory -Force -Path $workspaceArtifactDirectory | Out-Null
+          Copy-Item -Path (Join-Path $buildDirectory '*') -Destination $workspaceArtifactDirectory -Recurse -Force
+          $workspaceFiles = @(Get-ChildItem -LiteralPath $workspaceArtifactDirectory -Force -Recurse -File)
+          if ($workspaceFiles.Count -eq 0) {
+            throw "Build files were created in runner temp but could not be copied to $workspaceArtifactDirectory"
+          }
+          $workspaceFiles | ForEach-Object { Write-Host ("Staged artifact file: " + $_.FullName + " (" + $_.Length + " bytes)") }
+
       - name: Upload Windows build artifact
         uses: actions/upload-artifact@v4
         with:
           name: windows-player-${{ github.sha }}
-          path: ${{ runner.temp }}/windows-player-${{ github.run_id }}-${{ github.run_attempt }}/**
+          path: artifacts/Windows/
           if-no-files-found: error
           retention-days: 14

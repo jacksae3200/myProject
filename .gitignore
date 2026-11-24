@@ -16,6 +16,7 @@
 
 .plastic/
 /actions-runner/
+/artifacts/
 Training/Cpc/runs/
 Tools/Voice/whisper.cpp/
 
