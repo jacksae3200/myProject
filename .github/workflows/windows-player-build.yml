@@ -1,0 +1,74 @@
+name: Windows Player Build
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-windows:
+    name: Build Windows x64 Player
+    runs-on: [self-hosted, windows, x64]
+    defaults:
+      run:
+        shell: pwsh
+    steps:
+      - name: Check out repository and Git LFS assets
+        uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      - name: Cache Unity Library
+        uses: actions/cache@v4
+        with:
+          path: Library
+          key: UnityLibrary-Windows-${{ hashFiles('ProjectSettings/ProjectVersion.txt', 'Assets/**', 'Packages/**', 'ProjectSettings/**') }}
+          restore-keys: |
+            UnityLibrary-Windows-
+
+      - name: Locate matching Unity Editor
+        id: unity
+        run: |
+          $versionLine = Get-Content 'ProjectSettings/ProjectVersion.txt' | Where-Object { $_ -match '^m_EditorVersion:' } | Select-Object -First 1
+          if (-not $versionLine) { throw 'ProjectSettings/ProjectVersion.txt does not declare m_EditorVersion.' }
+          $unityVersion = ($versionLine -split ':', 2)[1].Trim()
+          $candidates = @()
+          if ($env:UNITY_EDITOR_PATH) { $candidates += $env:UNITY_EDITOR_PATH }
+          $candidates += (Join-Path $env:ProgramFiles "Unity\Hub\Editor\$unityVersion\Editor\Unity.exe")
+          $unityPath = $candidates | Where-Object { Test-Path -LiteralPath $_ } | Select-Object -First 1
+          if (-not $unityPath) {
+            throw "Unity $unityVersion was not found. Install it at the Unity Hub default path or set UNITY_EDITOR_PATH on the runner."
+          }
+          "path=$unityPath" >> $env:GITHUB_OUTPUT
+          Write-Host "Using Unity $unityVersion at $unityPath"
+
+      - name: Build Windows x64 Player
+        env:
+          UNITY_EDITOR_PATH_FOR_JOB: ${{ steps.unity.outputs.path }}
+        run: |
+          $outputPath = Join-Path $env:GITHUB_WORKSPACE 'artifacts\Windows\My project.exe'
+          New-Item -ItemType Directory -Force -Path (Split-Path -Parent $outputPath) | Out-Null
+          $logPath = Join-Path $env:RUNNER_TEMP 'unity-windows-build.log'
+          $env:UNITY_BUILD_OUTPUT = $outputPath
+          & $env:UNITY_EDITOR_PATH_FOR_JOB -batchmode -nographics -quit -projectPath $env:GITHUB_WORKSPACE -executeMethod CpcPrototype.Editor.WindowsPlayerBuild.Build -logFile $logPath
+          $unityExitCode = $LASTEXITCODE
+          if ($unityExitCode -ne 0) {
+            if (Test-Path -LiteralPath $logPath) { Get-Content -LiteralPath $logPath -Tail 160 }
+            exit $unityExitCode
+          }
+          if (-not (Test-Path -LiteralPath $outputPath)) {
+            if (Test-Path -LiteralPath $logPath) { Get-Content -LiteralPath $logPath -Tail 160 }
+            throw "Unity exited successfully but the player executable was not created: $outputPath"
+          }
+          Write-Host "Created $outputPath"
+
+      - name: Upload Windows build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-player-${{ github.sha }}
+          path: artifacts/Windows/
+          if-no-files-found: error
+          retention-days: 14

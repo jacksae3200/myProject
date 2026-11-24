@@ -1,6 +1,6 @@
 # 01. 구현 현황 및 변경 이력
 
-마지막 정리: 2026-11-24
+마지막 정리: 2026-11-25
 
 이 문서는 현재 구현을 확인하는 기준 문서입니다. 추가 요청은 [02_FEATURE_REQUESTS.md](02_FEATURE_REQUESTS.md), 버그·수정 요청은 [03_BUGS_AND_FIXES.md](03_BUGS_AND_FIXES.md)에 작성합니다. 작업 절차는 [agents.md](../agents.md)의 7절을 따릅니다.
 
@@ -18,7 +18,7 @@
 - 생존 전투 기본 씬: [KayKit_DepthSurvival.unity](../Assets/Scenes/KayKit_DepthSurvival.unity).
 - 전술 검증 씬: [KayKit_TacticsTest.unity](../Assets/Scenes/KayKit_TacticsTest.unity).
 - 초기 CPC 테스트: [PicoCpcTest.unity](../Assets/CpcPrototype/Scenes/PicoCpcTest.unity).
-- 빌드 씬 목록에는 현재 SampleScene만 활성화되어 있습니다. 위 기본 플레이 씬과 빌드 시작 씬은 다릅니다. 빌드 작업 시 EditorBuildSettings를 확인하세요.
+- 빌드 시작 씬은 [KayKit_DepthSurvival.unity](../Assets/Scenes/KayKit_DepthSurvival.unity)입니다. `ProjectSettings/EditorBuildSettings.asset`에서 이 씬만 활성화되어 있습니다. 플레이 테스트용 `SampleScene`은 빌드 목록에 포함하지 않습니다.
 
 ## 현재 구현 목록
 
@@ -43,6 +43,8 @@
 | SYS-017 | Unity 독립 Core 첫 분리 | `CpcPrototype.Core` asmdef에서 Unity 참조 없이 행동 트리 실행. NUnit 테스트는 Unity Edit Mode와 별도 .NET CI 실행 경로를 구성, Actions 결과는 FEAT-006 검증 대기 | [Core](../Assets/CpcPrototype/Core), [테스트](../Assets/CpcPrototype/Tests/EditMode), [CI/CD 가이드](CI_CD.md). Unity Editor 기반 테스트 미실행 |
 | SYS-018 | 탄약 규칙과 플레이어 연동 | 발사·재장전·잔탄 규칙을 순수 `AmmoInventory` Core로 분리하고 R키, 빈 탄창 자동 재장전, 탄약 HUD/소진 경고를 SurvivalPlayer에 연결 | FEAT-004. [AmmoInventory](../Assets/CpcPrototype/Core/AmmoInventory.cs), [SurvivalPlayer](../Assets/CpcPrototype/Survival/SurvivalPlayer.cs), [전투 안내](../Assets/CpcPrototype/Survival/CombatFeatures.md). NUnit 테스트 13개 통과(로컬 NUnit 실행), Unity 통합 플레이 미실행 |
 | SYS-019 | GitHub 업로드 정리 | 로컬 녹화·생성 프리뷰를 Git에서 제외하고 필수 100 MiB 초과 텍스처 3개를 Git LFS로 관리 | FEAT-007. 저장소 준비 과정이며 앱 실행 및 원격 푸시는 별도 |
+| SYS-020 | Windows 빌드 시작 씬 | `KayKit_DepthSurvival`을 유일한 활성 빌드 씬으로 설정. 로컬 Actions runner 폴더는 Git에서 제외 | FEAT-008. 씬 파일 경로·GUID 정적 확인, 실제 Player 빌드 미실행 |
+| SYS-021 | Windows Player CI 빌드 | self-hosted Windows x64 runner에서 Unity batch mode 빌드 후 GitHub Actions artifact로 보관 | FEAT-009. workflow·빌드 진입점 정적 확인; runner 실행 및 산출물 확인 대기 |
 
 ## 상세 문서와 검증 시 주의점
 
@@ -56,6 +58,22 @@
 ## 변경 이력
 
 최신 항목을 위에 추가합니다. 기존 기능의 최초 구현 날짜는 확인되지 않아 임의로 부여하지 않았습니다.
+
+### 2026-11-25 — FEAT-008 · 생존 씬을 빌드 시작 씬으로 설정
+
+- `ProjectSettings/EditorBuildSettings.asset`의 유일한 활성 씬을 `Assets/Scenes/KayKit_DepthSurvival.unity`로 변경했습니다. `.meta`의 GUID `54bb00d9487e7cb4f9334c07994eaba7`와 설정 GUID가 일치하는지 확인했습니다. `SampleScene` 에셋은 삭제하지 않았으며 빌드 목록에서만 제외했습니다.
+- GitHub runner를 프로젝트 내부에 풀어 둔 로컬 `actions-runner/` 폴더가 `git add .`에 들어가지 않도록 `.gitignore`에 추가했습니다. 기존 runner 파일은 건드리지 않았습니다.
+- 검증: 빌드 씬 파일 존재, 유일한 활성 씬 경로 및 GUID 정적 대조, `git diff --check`. Unity Player 빌드와 플레이 실행은 미실행.
+- 변경: `ProjectSettings/EditorBuildSettings.asset`, `.gitignore`, `Docs/01_IMPLEMENTED.md`, `Docs/02_FEATURE_REQUESTS.md`, `Docs/CI_CD.md`.
+- 남은 사항: Windows x64 빌드 workflow와 Butler 배포 단계는 별도 작업입니다.
+
+### 2026-11-25 — FEAT-009 · GitHub Actions Windows x64 플레이어 빌드
+
+- `Assets/CpcPrototype/Editor/WindowsPlayerBuild.cs`에 활성 Build Settings 씬을 Windows x64 대상으로 빌드하는 Unity batch mode 진입점을 추가했습니다. 출력 경로를 환경 변수로 받고, 빌드 실패를 workflow 실패로 반환합니다.
+- `.github/workflows/windows-player-build.yml`은 `main` 푸시 및 수동 실행에서 Git LFS 파일을 체크아웃하고, `ProjectVersion.txt`와 일치하는 Unity Editor를 self-hosted Windows x64 runner에서 찾아 빌드합니다. 성공한 플레이어 파일을 14일 보관 Actions artifact로 업로드합니다. PR 이벤트는 self-hosted runner가 외부 PR 코드를 실행하지 않도록 트리거에 넣지 않았습니다.
+- 검증: 프로젝트 버전 6000.6.10f1, 활성 빌드 씬 경로와 파일 존재, workflow의 runner/수동 트리거/artifact 업로드, 빌드 진입점의 Windows x64 타깃을 정적 확인했습니다. `git diff --check` 통과. Unity Editor 빌드와 Actions runner 실행은 아직 수행하지 않았으므로 FEAT-009는 검증 대기입니다.
+- 변경: `Assets/CpcPrototype/Editor/WindowsPlayerBuild.cs` 및 `.meta`, `.github/workflows/windows-player-build.yml`, `Docs/02_FEATURE_REQUESTS.md`, `Docs/01_IMPLEMENTED.md`, `Docs/CI_CD.md`.
+- 다음 단계: 변경사항을 GitHub에 푸시한 뒤 **Actions → Windows Player Build → Run workflow**로 실행하고 `windows-player-<커밋 SHA>` artifact를 내려받아 확인합니다. itch.io 업로드는 이 workflow에 포함하지 않았습니다.
 
 ### 2026-11-24 — FEAT-007 · GitHub 업로드를 위한 저장소 정리
 

@@ -15,6 +15,7 @@
 *.suo
 
 .plastic/
+/actions-runner/
 Training/Cpc/runs/
 Tools/Voice/whisper.cpp/
 

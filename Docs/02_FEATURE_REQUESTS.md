@@ -1,6 +1,6 @@
 # 02. 추가 기능 요청
 
-마지막 갱신: 2026-11-24
+마지막 갱신: 2026-11-25
 
 새 기능을 원할 때 이 파일에 작성하세요. 기존 동작의 오류·수정은 [03_BUGS_AND_FIXES.md](03_BUGS_AND_FIXES.md)에 작성합니다. 현재 기능은 [01_IMPLEMENTED.md](01_IMPLEMENTED.md)에서 확인합니다.
 
@@ -19,6 +19,24 @@
 - 명시한 사용자 작업 범위가 우선입니다. 일괄 작업에서는 의존성과 우선순위를 따르며, 같은 우선순위라면 진행을 막는 버그를 먼저 처리합니다.
 
 ## 진행할 요청
+
+### FEAT-009 — GitHub Actions에서 Windows x64 플레이어 빌드
+
+- 상태: 검증 대기
+- 우선순위: P1
+- 작성일: 2026-11-25
+- 원하는 동작: main에 푸시하거나 수동 실행할 때 등록된 Windows self-hosted runner가 프로젝트의 활성 빌드 씬을 Windows x64 플레이어로 빌드하고, 결과물을 Actions에서 내려받을 수 있게 한다.
+- 적용 범위: Unity batch mode 빌드 진입점, GitHub Actions Windows 빌드 workflow, 실행 및 결과 확인 안내.
+- 완료 기준:
+  - [x] 프로젝트의 활성 Build Settings 씬을 사용해 Windows x64 빌드를 실행한다.
+  - [x] 빌드 성공/실패를 workflow 결과에 반영하고 빌드 파일을 Actions artifact로 보관한다.
+  - [ ] 실제 self-hosted runner에서 workflow를 실행하고 Windows 플레이어 산출물을 확인한다.
+- 관련 요청 / 의존성: FEAT-008, FEAT-006. Runner에 ProjectVersion.txt와 일치하는 Unity Editor 및 Windows Build Support가 설치·활성화되어야 한다.
+- 구현 메모 / 변경 파일: `Assets/CpcPrototype/Editor/WindowsPlayerBuild.cs`, `.github/workflows/windows-player-build.yml`, `Docs/CI_CD.md`.
+- 검증 방법 / 결과: workflow의 runner/수동 트리거/artifact 설정, 빌드 진입점의 Windows x64 타깃, 활성 씬 경로 및 씬 파일 존재 정적 확인 통과. `git diff --check` 통과. Unity 빌드 및 GitHub Actions 실행은 아직 하지 않았다.
+- 남은 사항 / 보류 이유: 변경을 GitHub에 푸시한 뒤 Actions에서 workflow를 실행해 산출물을 확인해야 한다.
+- 완료일:
+- 구현 기록: [1번 문서 FEAT-009 변경 이력](01_IMPLEMENTED.md#2026-11-25--feat-009--github-actions-windows-x64-플레이어-빌드), SYS-021.
 
 ### FEAT-006 — Unity 엔진 독립 Core와 GitHub Actions CI/CD 기반
 
@@ -86,6 +104,22 @@ FEAT-004는 검증 대기 중입니다. FEAT-002와 FEAT-003은 아래 완료한
 ~~~
 
 ## 완료한 요청
+
+### FEAT-008 — 생존 씬을 빌드 시작 씬으로 설정
+
+- 상태: 완료
+- 우선순위: P1
+- 작성일: 2026-11-25
+- 원하는 동작: Windows 빌드를 실행하면 기본 생존 플레이 씬에서 시작한다.
+- 적용 범위: `ProjectSettings/EditorBuildSettings.asset`의 활성 씬 설정.
+- 완료 기준:
+  - [x] `KayKit_DepthSurvival`을 유일한 활성 빌드 씬으로 설정한다.
+  - [x] 씬 경로와 GUID가 실제 에셋의 `.meta`와 일치한다.
+- 검증 방법 / 결과: 씬 에셋 존재, EditorBuildSettings 경로·GUID 대조, `git diff --check` 통과. Player 빌드 및 플레이 실행은 미실행.
+- 변경 파일: `ProjectSettings/EditorBuildSettings.asset`, `.gitignore`, `Docs/01_IMPLEMENTED.md`, `Docs/02_FEATURE_REQUESTS.md`, `Docs/CI_CD.md`.
+- 남은 사항: Windows x64 빌드와 itch.io 업로드 workflow는 별도 단계다. 로컬 runner 폴더 `actions-runner/`는 `.gitignore` 처리했다.
+- 완료일: 2026-11-25
+- 구현 기록: [1번 문서 FEAT-008 변경 이력](01_IMPLEMENTED.md#2026-11-25--feat-008--생존-씬을-빌드-시작-씬으로-설정), SYS-020.
 
 ### FEAT-007 — GitHub 저장소에서 실험 산출물 정리
 
