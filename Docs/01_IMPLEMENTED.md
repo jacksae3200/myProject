@@ -59,11 +59,11 @@
 
 ### 2026-11-24 — FEAT-007 · GitHub 업로드를 위한 저장소 정리
 
-- `Recordings/`, Viking 프리뷰 생성물, 모델·테스트 영상 폴더를 `.gitignore`에 추가했습니다. 이 경로의 로컬 파일은 보존하고 초기 커밋의 인덱스에서만 제외했습니다.
-- Unity 프로젝트에서 사용 가능한 원본 에셋은 유지했습니다. 일반 Git의 100 MiB 제한을 넘는 Viking 텍스처 3개만 Git LFS로 추적하도록 `.gitattributes`를 추가했습니다.
-- 초기 커밋을 아직 교체하기 전입니다. 원본 이력을 `backup-initial-upload-before-cleanup` 브랜치에 보존하고 최종 검토 후 정리된 초기 커밋을 만들 예정입니다.
-- 검증: `git check-attr`에서 세 텍스처 모두 `filter: lfs`, `git lfs ls-files`에서 세 파일을 LFS 대상으로 확인했습니다. 저장소 객체/푸시 크기 정리와 원격 푸시는 미완료입니다.
-- 변경: `.gitignore`, `.gitattributes`, `Docs/02_FEATURE_REQUESTS.md`, `Docs/01_IMPLEMENTED.md`.
+- `Recordings/`, `Assets/VikingTexturePreview/`, `CpcCleanVideos/`, `CpcTacticalVideos/`, `CpcComparisonVideos/`를 `.gitignore`에 추가했습니다. 추적 대상에서 제외했지만 작업 폴더의 파일은 보존했습니다.
+- 일반 Git 100 MiB 제한을 넘는 필수 원본 텍스처 3개를 `.gitattributes`에서 Git LFS 대상으로 지정했습니다. Unity가 재생성하는 필수 프로젝트 파일·원본 에셋은 유지했습니다.
+- 최초 업로드의 단일 팩은 2.38 GiB로 GitHub의 2 GiB 제한을 넘었습니다. 초기 이력을 코드/설정, Viking Village, 주요 에셋, 나머지 에셋의 4개 순차 커밋으로 다시 구성했습니다. 원본 최초 커밋과 정리된 단일 커밋은 각각 `backup-initial-upload-before-cleanup`, `backup-cleaned-single-commit` 브랜치에 보존했습니다.
+- 검증: Git 상태 깨끗함. `git ls-tree`에서 일반 Git 100 MiB 초과 blob 없음. `git lfs ls-files`에 텍스처 3개 확인. 녹화/프리뷰 폴더는 `!!`로 무시되고 로컬 경로 존재 확인. GitHub 원격 푸시는 아직 실행하지 않았습니다.
+- 변경: `.gitignore`, `.gitattributes`, `Docs/02_FEATURE_REQUESTS.md`, `Docs/01_IMPLEMENTED.md`, 초기 커밋 체인.
 
 ### 2026-11-24 — FEAT-004 · 라이플 탄약 제한과 재장전
 
